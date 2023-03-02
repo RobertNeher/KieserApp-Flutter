@@ -1,0 +1,6 @@
+package com.example.kieser
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
