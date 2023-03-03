@@ -29,6 +29,7 @@ class Machine {
   Map<String, dynamic> findByID(String machineID) {
     for (Map<String, dynamic> machine in _machines) {
       if (machine['machineID'] == machineID) {
+        print('findByID: $machine'); // TODO: remove before release version
         return machine;
       }
     }

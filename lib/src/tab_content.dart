@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:kieser/src/get_parameters.dart';
 import 'package:kieser/src/training_result.dart';
@@ -10,19 +8,6 @@ Widget TabContent(Database database, int customerID,
     Map<String, dynamic> machine, VoidCallback moveForward) {
   Map<String, dynamic> defaults = {};
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  void getDefaults() async {
-    SharedPreferences prefs = await _prefs;
-
-    if (prefs.containsKey(machine['id'])) {
-      defaults = json.decode(prefs.getString(machine['id'])!);
-    }
-    if (defaults['duration'] == null || defaults['duration'] == 0) {
-      defaults['duration'] = prefs.getInt('DEFAULT_DURATION');
-    }
-  }
-
-  print('${machine}'); // TODO: remove before release version
   return Container(
       width: 500,
       color: Colors.black,

@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kieser/model/lib/machine.dart';
 // import 'package:intl/intl.dart';
 import 'package:kieser/model/lib/training_data.dart';
 import 'package:kieser/src/app_bar.dart';
@@ -32,14 +33,13 @@ class TrainingsPlanState extends State<TrainingsPlan>
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   static late Visibility _fab;
   static bool _autoForward = false;
-  // late TrainingData _trainingData;
   List<Map<String, dynamic>> _stations = [];
   late TabController _tabController;
-  late Map<String, dynamic> _machine;
   List<Widget> tabContents = <Widget>[];
   Map<String, dynamic> _customerDetail = {};
+  Map<String, dynamic> _machineDetail = {};
   bool _showFAB = false;
-  String _name = '';
+  String _title = '';
 
   List<Tab> _getTabBar() {
     List<Tab> tabList = <Tab>[];
@@ -55,13 +55,21 @@ class TrainingsPlanState extends State<TrainingsPlan>
     return tabList;
   }
 
-  Future<void> _getCustomerDetail() async {
-    // Future<Map<String, dynamic>> _getCustomerDetail() async {
+  Future<Map<String, dynamic>> _getCustomerDetail() async {
     final StoreRef customersStore = intMapStoreFactory.store("customers");
     final Finder finder =
         Finder(filter: Filter.equals('customerID', widget.customerID));
     var record = await customersStore.find(widget.database, finder: finder);
-    _customerDetail = await record[0].value as Map<String, dynamic>;
+    _customerDetail = record[0].value as Map<String, dynamic>;
+    return _customerDetail;
+  }
+
+  Future<Map<String, dynamic>> _getMachineDetail(String machineID) async {
+    final StoreRef machinesStore = intMapStoreFactory.store("machines");
+    final Finder finder = Finder(filter: Filter.equals('id', machineID));
+    var record = await machinesStore.find(widget.database, finder: finder);
+    _machineDetail = record[0].value as Map<String, dynamic>;
+    return _machineDetail;
   }
 
   Future<void> _getStations() async {
@@ -79,11 +87,14 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   Widget _getTabContent(
       TabController tabController, void Function() moveForward) {
+    Machine machineRepository = Machine(widget.database);
     tabContents = [];
 
     for (Map<String, dynamic> station in _stations) {
-      tabContents.add(TabContent(
-          widget.database, widget.customerID, _machine, _moveForward));
+      _getMachineDetail(station['machineID']).whenComplete(() {
+        tabContents.add(TabContent(
+            widget.database, widget.customerID, _machineDetail, moveForward));
+      });
     }
     return TabBarView(controller: tabController, children: tabContents);
   }
@@ -109,26 +120,22 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   @override
   void initState() {
-    _getStations().whenComplete(() {
-      print('Plan2: $_stations');
-    });
-    _getAutoForward().whenComplete(() {
-      print('Plan2: $_autoForward');
-    });
     _getCustomerDetail().whenComplete(() {
-      print('Plan2: $_customerDetail');
+      _title =
+          'Trainings-Plan für\n${_customerDetail["name"]} (${widget.customerID})';
     });
-
     _fab = Visibility(
         child: FloatingActionButton(
       backgroundColor: Colors.blue,
       onPressed: _saveResults,
       child: const Icon(Icons.save),
     ));
-    // _trainingData = TrainingData(widget.database, widget.customerID);
-    _tabController =
-        TabController(length: _stations.length, initialIndex: 0, vsync: this);
-    _tabController.addListener(_handleTabSelection);
+
+    _getStations().whenComplete(() {
+      _tabController =
+          TabController(length: _stations.length, initialIndex: 0, vsync: this);
+      _tabController.addListener(_handleTabSelection);
+    });
     super.initState();
   }
 
@@ -141,37 +148,49 @@ class TrainingsPlanState extends State<TrainingsPlan>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: KieserAppBar(
-          title:
-              'Trainings-Plan für\n${_customerDetail["name"]} (${widget.customerID})'),
-      body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TabBar(
-              labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-              tabs: _getTabBar(),
-              padding: const EdgeInsets.all(0),
-              isScrollable: true,
-              dividerColor: Colors.amber,
-              indicatorColor: Colors.black,
-              labelColor: Colors.white,
-              unselectedLabelStyle: const TextStyle(
-                  fontFamily: "Railway",
-                  fontWeight: FontWeight.normal,
-                  fontSize: 24,
-                  color: Colors.grey),
-              labelStyle: const TextStyle(
-                  backgroundColor: Colors.black,
-                  fontFamily: "Railway",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.white),
-              unselectedLabelColor: Colors.grey,
-              controller: _tabController,
-            ),
-            Expanded(child: _getTabContent(_tabController, _moveForward))
-          ]),
+      appBar: KieserAppBar(title: _title),
+      body: FutureBuilder<void>(
+          future: Future.wait(
+              [_getAutoForward(), _getStations(), _getCustomerDetail()]),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                  child: CircularProgressIndicator(color: Colors.blue));
+            }
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TabBar(
+                      labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      tabs: _getTabBar(),
+                      padding: const EdgeInsets.all(0),
+                      isScrollable: true,
+                      dividerColor: Colors.amber,
+                      indicatorColor: Colors.black,
+                      labelColor: Colors.white,
+                      unselectedLabelStyle: const TextStyle(
+                          fontFamily: "Railway",
+                          fontWeight: FontWeight.normal,
+                          fontSize: 24,
+                          color: Colors.grey),
+                      labelStyle: const TextStyle(
+                          backgroundColor: Colors.black,
+                          fontFamily: "Railway",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.white),
+                      unselectedLabelColor: Colors.grey,
+                      controller: _tabController,
+                    ),
+                    Expanded(
+                        child: _getTabContent(_tabController, _moveForward))
+                  ]);
+            } else {
+              return const Center(child: Text('Something went wrong!'));
+            }
+          }),
       floatingActionButton: _showFAB ? _fab : null,
     );
   }
