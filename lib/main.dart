@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kieser/src/initialize.dart';
-import 'package:window_manager/window_manager.dart';
+// import 'package:window_manager/window_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -14,7 +14,7 @@ import 'package:settings/settings.dart';
 import 'package:kieser/src/about.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   // await windowManager.ensureInitialized();
   // if (Platform.isWindows) {
   //   WindowManager.instance.setMinimumSize(const Size(1200, 600));
@@ -23,9 +23,6 @@ void main() async {
   final Database database;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   SharedPreferences prefs = await _prefs;
-
-  // TODO: Remove in production code
-  String DB_FILE = 'assets/test.db';
 
   if (kIsWeb) {
     database = await databaseFactoryWeb.openDatabase(DB_FILE);
@@ -74,7 +71,7 @@ class KieserApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AboutPage(title: APP_TITLE, database: database!),
+      home: AboutPage(title: APP_TITLE, database: database),
     );
   }
 }

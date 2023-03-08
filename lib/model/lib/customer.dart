@@ -3,7 +3,7 @@ import 'package:sembast/sembast.dart';
 class Customer {
   late final Database _database;
   late final StoreRef _customerStore;
-  List<Map<String, dynamic>> customers = [];
+  List<Map<String, dynamic>> _customers = [];
 
   Future<List<Map<String, dynamic>>> _findCustomers() async {
     List<Map<String, dynamic>> customerList = [];
@@ -21,16 +21,22 @@ class Customer {
     _customerStore = intMapStoreFactory.store("customers");
 
     _findCustomers().then((value) {
-      customers = value;
+      _customers = value;
     });
   }
 
-  List<Map<String, dynamic>> getAll() {
-    return customers;
+  Future<List<Map<String, dynamic>>> getAll() async {
+    var records = await _customerStore.find(_database);
+
+    _customers = [];
+    for (var item in records) {
+      _customers.add(item.value as Map<String, dynamic>);
+    }
+    return _customers;
   }
 
-  Map<String, dynamic> findByID(int customerID) {
-    for (Map<String, dynamic> customer in customers) {
+  Future<Map<String, dynamic>> findByID(int customerID) async {
+    for (Map<String, dynamic> customer in await getAll()) {
       if (customer['customerID'] == customerID) {
         return customer;
       }

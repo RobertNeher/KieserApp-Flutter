@@ -1,4 +1,4 @@
-const String DB_FILE = 'assets/kieser.db';
+const String DB_FILE = 'assets/test.db';
 const String APP_TITLE = 'Your training companion';
 const String ABOUT_TEXT = """
 Die KieserApp führt dich durch dein Training:

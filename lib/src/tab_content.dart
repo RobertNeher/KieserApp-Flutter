@@ -6,14 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Widget TabContent(Database database, int customerID,
     Map<String, dynamic> machine, VoidCallback moveForward) {
-  Map<String, dynamic> defaults = {};
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   return Container(
       width: 500,
       color: Colors.black,
       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         const SizedBox(height: 10),
-        Text(machine['title'] == '-' ? 'Zweck der Maschine' : machine['title'],
+        Text(
+            machine.isNotEmpty && machine['title'] == '-'
+                ? 'Zweck der Maschine'
+                : machine['title'],
             style: const TextStyle(
                 fontFamily: "Railway",
                 fontWeight: FontWeight.bold,
@@ -83,8 +85,10 @@ Widget TabContent(Database database, int customerID,
                   Container(
                       alignment: Alignment.topRight,
                       width: 175,
-                      child: showParameterAndValues(
-                          database, customerID, machine)),
+                      child: ShowParameterAndValues(
+                          database: database,
+                          customerID: customerID,
+                          machineID: machine['id'])),
                 ])),
         const Divider(
           height: 15,

@@ -5,41 +5,38 @@ class Machine {
   late final StoreRef _machineStore;
   List<Map<String, dynamic>> _machines = [];
 
-  Future<void> _findMachines() async {
-    List<RecordSnapshot<Object?, Object?>> records = [];
-    records = await _machineStore.find(_database);
+  Future<List<Map<String, dynamic>>> getAll() async {
+    var records = await _machineStore.find(_database);
 
+    if (records.isEmpty) {
+      return [];
+    }
     _machines = [];
-    for (RecordSnapshot<Object?, Object?> record in records) {
+    for (var record in records) {
       _machines.add(record.value as Map<String, dynamic>);
     }
+    return _machines;
   }
 
   Machine(Database database) {
     _database = database;
     _machineStore = intMapStoreFactory.store("machines");
-
-    _findMachines();
+    getAll();
   }
 
-  List<Map<String, dynamic>> getAll() {
-    return _machines;
-  }
-
-  Map<String, dynamic> findByID(String machineID) {
-    for (Map<String, dynamic> machine in _machines) {
-      if (machine['machineID'] == machineID) {
-        print('findByID: $machine'); // TODO: remove before release version
+  Future<Map<String, dynamic>> findByID(String machineID) async {
+    List<Map<String, dynamic>> allMachines = await getAll();
+    for (Map<String, dynamic> machine in allMachines) {
+      if (machine['id'] == machineID) {
         return machine;
       }
     }
     return {};
   }
 
-  List<String> getParameters(String machineID) {
-    Map<String, dynamic> machine = findByID(machineID);
-
-    if (machine.isNotEmpty) return machine['parameters'];
+  Future<List<String>> getParameters(String machineID) async {
+    Map<String, dynamic> machine = await findByID(machineID);
+    if (machine.isNotEmpty) return (machine['parameters']).cast<String>();
     return [];
   }
 }

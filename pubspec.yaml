@@ -11,9 +11,10 @@ dependencies:
   email_validator:
   flutter:
     sdk: flutter
-  flutter_email_sender: 
+  get_it:
   model:
     path: './lib/model/'
+  path:
   path_provider:
   sembast:
   sembast_web:

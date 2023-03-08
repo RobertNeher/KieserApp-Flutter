@@ -4,11 +4,13 @@ import 'package:model/machine.dart';
 class Plan {
   int _customerID = 0;
   Database? _database;
+  final List<Map<String, dynamic>> _plans = [];
   final StoreRef _plansStore = intMapStoreFactory.store("plans");
 
   Plan(Database database, int customerID) {
     _database = database;
     _customerID = customerID;
+    getAll().then((value) => _plans);
   }
 
   Future<List<Map<String, dynamic>>> getStations() async {
@@ -23,17 +25,24 @@ class Plan {
 
   Future<List<String>> getStationParameters(String stationID) async {
     Machine machines = Machine(_database!);
-    return machines.getParameters(stationID);
+    List<Map<String, dynamic>> allMachines = await machines.getAll();
+
+    for (Map<String, dynamic> machine in allMachines) {
+      if (machine['id'] == stationID) {
+        return machines.getParameters(stationID);
+      }
+    }
+    return [];
   }
 
-  Future<List<dynamic>> getStationParameterValues(String stationID) async {
-    List<dynamic> paramValues = [];
-    List<dynamic> parameterValues = [];
+  Future<List<String>> getStationParameterValues(String stationID) async {
+    List<String> paramValues = <String>[];
+    List<String> parameterValues = <String>[];
     Map<String, dynamic> latestPlan = await getLatest();
 
     for (Map<String, dynamic> station in latestPlan['stations']) {
       if (station['machineID'] == stationID) {
-        paramValues = station['parameterValues'];
+        paramValues = station['parameterValues'].cast<String>();
         parameterValues.addAll(paramValues);
         parameterValues.add(station['movement']);
         parameterValues.add(station['comments']);
@@ -44,19 +53,29 @@ class Plan {
   }
 
   Future<Map<String, dynamic>> getLatest() async {
+    Map<String, dynamic> result = {};
     Finder finder = Finder(
         filter: Filter.equals('customerID', _customerID),
         sortOrders: [SortOrder('validFrom', false)]);
-    var record = await _plansStore.findFirst(_database!, finder: finder);
-    return record!.value as Map<String, dynamic>;
+    var record = await _plansStore.find(_database!, finder: finder);
+
+    if (record.isEmpty) {
+      return {};
+    }
+    return record[0].value as Map<String, dynamic>;
   }
 
   Future<List<Map<String, dynamic>>> getAll() async {
-    List<Map<String, dynamic>> result = [];
     var records = await _plansStore.find(_database!);
+
     for (var item in records) {
-      result.add(item.value as Map<String, dynamic>);
+      _plans.add(item.value as Map<String, dynamic>);
     }
-    return result;
+    return _plans;
+  }
+
+  @override
+  String toString() {
+    return ('Instance of "Plan" for customer $_customerID:\n$_plans\n------');
   }
 }

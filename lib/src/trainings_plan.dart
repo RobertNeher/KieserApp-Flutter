@@ -67,7 +67,12 @@ class TrainingsPlanState extends State<TrainingsPlan>
   Future<Map<String, dynamic>> _getMachineDetail(String machineID) async {
     final StoreRef machinesStore = intMapStoreFactory.store("machines");
     final Finder finder = Finder(filter: Filter.equals('id', machineID));
+    Map<String, dynamic> result = {};
     var record = await machinesStore.find(widget.database, finder: finder);
+
+    if (record.isEmpty) {
+      return {};
+    }
     _machineDetail = record[0].value as Map<String, dynamic>;
     return _machineDetail;
   }
@@ -87,13 +92,14 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   Widget _getTabContent(
       TabController tabController, void Function() moveForward) {
-    Machine machineRepository = Machine(widget.database);
     tabContents = [];
 
     for (Map<String, dynamic> station in _stations) {
       _getMachineDetail(station['machineID']).whenComplete(() {
-        tabContents.add(TabContent(
-            widget.database, widget.customerID, _machineDetail, moveForward));
+        if (_machineDetail.isNotEmpty) {
+          tabContents.add(TabContent(
+              widget.database, widget.customerID, _machineDetail, moveForward));
+        }
       });
     }
     return TabBarView(controller: tabController, children: tabContents);
