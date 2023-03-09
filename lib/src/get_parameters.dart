@@ -44,6 +44,8 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
     super.initState();
     trainingsPlan = Plan(widget.database, widget.customerID);
     machines = Machine(widget.database);
+    _getParameters();
+    _getParameterValues();
   }
 
   @override
@@ -52,7 +54,7 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
         future: Future.wait<void>([_getParameters(), _getParameterValues()]),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
                 child: CircularProgressIndicator(
               backgroundColor: Colors.blue,
               strokeWidth: 5,
@@ -84,11 +86,11 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
               ]));
             }
             tableRows.add(TableRow(children: [
-              TableCell(
+              const TableCell(
                   verticalAlignment: TableCellVerticalAlignment.top,
-                  child: Container(
+                  child: SizedBox(
                       height: ROW_HEIGHT,
-                      child: const Text("Notizen",
+                      child: Text("Notizen",
                           style: TextStyle(
                               fontFamily: "Railway",
                               fontWeight: FontWeight.bold,

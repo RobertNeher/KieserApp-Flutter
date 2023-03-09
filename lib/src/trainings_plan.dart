@@ -55,26 +55,23 @@ class TrainingsPlanState extends State<TrainingsPlan>
     return tabList;
   }
 
-  Future<Map<String, dynamic>> _getCustomerDetail() async {
+  Future<void> _getCustomerDetail() async {
     final StoreRef customersStore = intMapStoreFactory.store("customers");
     final Finder finder =
         Finder(filter: Filter.equals('customerID', widget.customerID));
     var record = await customersStore.find(widget.database, finder: finder);
     _customerDetail = record[0].value as Map<String, dynamic>;
-    return _customerDetail;
   }
 
-  Future<Map<String, dynamic>> _getMachineDetail(String machineID) async {
+  Future<void> _getMachineDetail(String machineID) async {
     final StoreRef machinesStore = intMapStoreFactory.store("machines");
     final Finder finder = Finder(filter: Filter.equals('id', machineID));
     Map<String, dynamic> result = {};
     var record = await machinesStore.find(widget.database, finder: finder);
 
-    if (record.isEmpty) {
-      return {};
+    if (record.isNotEmpty) {
+      _machineDetail = record[0].value as Map<String, dynamic>;
     }
-    _machineDetail = record[0].value as Map<String, dynamic>;
-    return _machineDetail;
   }
 
   Future<void> _getStations() async {
@@ -92,15 +89,13 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   Widget _getTabContent(
       TabController tabController, void Function() moveForward) {
+    // _getStations();
     tabContents = [];
 
     for (Map<String, dynamic> station in _stations) {
-      _getMachineDetail(station['machineID']).whenComplete(() {
-        if (_machineDetail.isNotEmpty) {
-          tabContents.add(TabContent(
-              widget.database, widget.customerID, _machineDetail, moveForward));
-        }
-      });
+      _getMachineDetail(station['machineID']);
+      tabContents.add(TabContent(
+          widget.database, widget.customerID, _machineDetail, moveForward));
     }
     return TabBarView(controller: tabController, children: tabContents);
   }
@@ -126,10 +121,12 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   @override
   void initState() {
-    _getCustomerDetail().whenComplete(() {
-      _title =
-          'Trainings-Plan für\n${_customerDetail["name"]} (${widget.customerID})';
-    });
+    _getCustomerDetail();
+    _getStations();
+    // _getCustomerDetail().whenComplete(() {
+    _title =
+        'Trainings-Plan für\n${_customerDetail["name"]} (${widget.customerID})';
+    // });
     _fab = Visibility(
         child: FloatingActionButton(
       backgroundColor: Colors.blue,
@@ -137,11 +134,9 @@ class TrainingsPlanState extends State<TrainingsPlan>
       child: const Icon(Icons.save),
     ));
 
-    _getStations().whenComplete(() {
-      _tabController =
-          TabController(length: _stations.length, initialIndex: 0, vsync: this);
-      _tabController.addListener(_handleTabSelection);
-    });
+    _tabController =
+        TabController(length: _stations.length, initialIndex: 0, vsync: this);
+    _tabController.addListener(_handleTabSelection);
     super.initState();
   }
 
