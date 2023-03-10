@@ -68,36 +68,42 @@
         },
         {
             "customerID": 19711,
-            "validFrom": "2022-12-31",
+            "validFrom": "2023-02-15",
             "stations": [
                 {
-                    "machineID": "B 1",
-                    "parameterValues": ["8", "-"],
-                    "movement": "6°",
+                    "machineID": "A 3",
+                    "parameterValues": ["2", "3", "4"],
+                    "movement": "",
                     "comments": ""
                 },
                 {
-                    "machineID": "B 7",
-                    "parameterValues": ["8", "-"],
-                    "movement": "120°",
+                    "machineID": "B 6",
+                    "parameterValues": ["-19", "2", "4"],
+                    "movement": "",
+                    "comments": ""
+                },
+                {
+                    "machineID": "F 1.1",
+                    "parameterValues": ["1", "F4", "12", "2", "4"],
+                    "movement": "",
                     "comments": ""
                 },
                 {
                     "machineID": "F 2.1",
-                    "parameterValues": ["N", "4 (gelb)", "9"],
+                    "parameterValues": ["4", "9"],
                     "movement": "",
                     "comments": ""
                 },
                 {
                     "machineID": "F 3.1",
-                    "parameterValues": ["1", "H7", "12", "10", "8", "N"],
+                    "parameterValues": ["1", "H7", "12", "10", "8"],
                     "movement": "",
                     "comments": ""
                 },
                 {
                     "machineID": "C 1",
                     "parameterValues": ["7", "hinten", "1"],
-                    "movement": "20",
+                    "movement": "",
                     "comments": "Beide Seiten!"
                 },
                 {
@@ -108,73 +114,7 @@
                 },
                 {
                     "machineID": "C 7",
-                    "parameterValues": ["4", "-"],
-                    "movement": "5 - 18",
-                    "comments": "Arme eng am Körper"
-                },
-                {
-                    "machineID": "D 5",
-                    "parameterValues": ["2", "2", "-"],
-                    "movement": "",
-                    "comments": "Nur Polster halten. Ellbogen drücken, nicht Hand"
-                },
-                {
-                    "machineID": "D 6",
-                    "parameterValues": ["6", "3", "horizontal"],
-                    "movement": "",
-                    "comments": "Ellenbogen etwas nach Aussen"
-                },
-                {
-                    "machineID": "H 1",
-                    "parameterValues": ["9"],
-                    "movement": "",
-                    "comments": ""
-                }
-            ]
-        },
-        {
-            "customerID": 19711,
-            "validFrom": "2023-01-31",
-            "stations": [
-                {
-                    "machineID": "B 1",
-                    "parameterValues": ["8", "-"],
-                    "movement": "6°",
-                    "comments": ""
-                },
-                {
-                    "machineID": "B 7",
-                    "parameterValues": ["8", "-"],
-                    "movement": "120°",
-                    "comments": ""
-                },
-                {
-                    "machineID": "F 2.1",
-                    "parameterValues": ["N", "4 (gelb)", "9"],
-                    "movement": "",
-                    "comments": ""
-                },
-                {
-                    "machineID": "F 3.1",
-                    "parameterValues": ["1", "H7", "12", "10", "8", "N"],
-                    "movement": "",
-                    "comments": ""
-                },
-                {
-                    "machineID": "C 1",
-                    "parameterValues": ["7", "hinten", "1"],
-                    "movement": "20",
-                    "comments": "Beide Seiten!"
-                },
-                {
-                    "machineID": "C 3",
-                    "parameterValues": ["6", "parallel", "hinten"],
-                    "movement": "",
-                    "comments": ""
-                },
-                {
-                    "machineID": "C 7",
-                    "parameterValues": ["4", "-"],
+                    "parameterValues": ["4"],
                     "movement": "5 - 18",
                     "comments": "Arme eng am Körper"
                 },

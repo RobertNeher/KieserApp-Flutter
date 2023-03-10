@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kieser/model/lib/customer.dart';
 import 'package:kieser/model/lib/machine.dart';
 // import 'package:intl/intl.dart';
 import 'package:kieser/model/lib/training_data.dart';
@@ -56,22 +57,14 @@ class TrainingsPlanState extends State<TrainingsPlan>
   }
 
   Future<void> _getCustomerDetail() async {
-    final StoreRef customersStore = intMapStoreFactory.store("customers");
-    final Finder finder =
-        Finder(filter: Filter.equals('customerID', widget.customerID));
-    var record = await customersStore.find(widget.database, finder: finder);
-    _customerDetail = record[0].value as Map<String, dynamic>;
+    Customer customer = Customer(widget.database);
+    _customerDetail = await customer.findByID(widget.customerID);
   }
 
   Future<void> _getMachineDetail(String machineID) async {
-    final StoreRef machinesStore = intMapStoreFactory.store("machines");
-    final Finder finder = Finder(filter: Filter.equals('id', machineID));
-    Map<String, dynamic> result = {};
-    var record = await machinesStore.find(widget.database, finder: finder);
+    Machine machine = Machine(widget.database);
 
-    if (record.isNotEmpty) {
-      _machineDetail = record[0].value as Map<String, dynamic>;
-    }
+    _machineDetail = await machine.findByID(machineID);
   }
 
   Future<void> _getStations() async {
