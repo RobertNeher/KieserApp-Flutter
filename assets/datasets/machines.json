@@ -1,11 +1,27 @@
 {
     "Machines": [
       {
+        "id": "A 3",
+        "title": "Bein-Aussenstreckung",
+        "parameters": ["Lehne", "Beine", "Loch"],
+        "affectedBodyParts": "<Bild>",
+        "description": "Stärkung der seitlichen Oberschenkelmuskeln",
+        "tutorialVideoURL": "http://kieser.de"
+      },
+      {
         "id": "B 1",
         "title": "Beinstreckung",
         "parameters": ["Lehne", "Beine"],
         "affectedBodyParts": "<Bild>",
         "description": "Stärkung der Oberschenkelmuskeln",
+        "tutorialVideoURL": "http://kieser.de"
+      },
+      {
+        "id": "B 6",
+        "title": "Beinpresse",
+        "parameters": ["Sitz", "Lehne", "Schultern"],
+        "affectedBodyParts": "<Bild>",
+        "description": "Oberschenkelstreckung",
         "tutorialVideoURL": "http://kieser.de"
       },
       {
@@ -17,9 +33,17 @@
         "tutorialVideoURL": ""
       },
       {
+        "id": "F 1.1",
+        "title": "Rumpfdrehung",
+        "parameters": ["Fuss", "Beine", "Kurbel", "Start", "Loch"],
+        "affectedBodyParts": "<Bild>",
+        "description": "",
+        "tutorialVideoURL": ""
+      },
+      {
         "id": "F 2.1",
         "title": "Bauchmuskel",
-        "parameters": ["Polster", "Anschlag", "Füsse"],
+        "parameters": ["Anschlag", "Füsse"],
         "affectedBodyParts": "<Bild>",
         "description": "",
         "tutorialVideoURL": ""
@@ -27,7 +51,7 @@
       {
         "id": "F 3.1",
         "title": "Untere Rückenpartie",
-        "parameters": ["Füsse", "Beine", "Hebel", "Start", "Anschlag", "Polster"],
+        "parameters": ["Fuss", "Beine", "Hebel", "Start", "Anschlag"],
         "affectedBodyParts": "<Bild>",
         "description": "",
         "tutorialVideoURL": ""
@@ -68,8 +92,7 @@
         "title": "-",
         "parameters": [
           "Lehne",
-          "Arme",
-          "Sitzpolster"
+          "Arme"
         ],
         "affectedBodyParts": "<Bild>",
         "description": "",
@@ -96,17 +119,6 @@
         "affectedBodyParts": "<Bild>",
         "description": "",
         "tutorialVideoURL": ""
-      },
-      {
-        "id": "Z 1",
-        "title": "Fake",
-        "parameters": [
-          "Level"
-        ],
-        "affectedBodyParts": "<Bild>",
-        "description": "Nur ein Platzhalter",
-        "tutorialVideoURL": "http://kieser.de"
       }
-
     ]
   }
