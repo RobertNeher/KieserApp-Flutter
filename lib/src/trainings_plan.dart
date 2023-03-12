@@ -65,7 +65,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   Widget _getTabContent(
       TabController tabController, void Function() moveForward) {
-    // _getStations();
     tabContents = [];
 
     for (Map<String, dynamic> station in _stations) {
@@ -83,11 +82,9 @@ class TrainingsPlanState extends State<TrainingsPlan>
   }
 
   void _handleTabSelection() {
-    setState(() {
       if (_tabController.indexIsChanging) {
         _showFAB = (_tabController.index == _stations.length - 1);
       }
-    });
   }
 
   _moveForward() {
