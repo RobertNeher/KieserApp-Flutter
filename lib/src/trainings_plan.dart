@@ -102,7 +102,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
     _getStations();
         _title =
             'Trainings-Plan für\n!customerName! (${widget.customerID})';
-    // });
     _fab = Visibility(
         child: FloatingActionButton(
       backgroundColor: Colors.blue,
