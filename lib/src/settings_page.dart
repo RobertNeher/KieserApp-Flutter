@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kieser/src/app_bar.dart';
+import 'package:sembast/sembast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key, required this.title});
+  const SettingsPage({super.key, required this.title, required this.database});
+  final Database database;
   final String title;
 
   @override
@@ -67,7 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(40),
-          child: KieserAppBar(title: widget.title),
+          child: KieserAppBar(title: widget.title, database: widget.database, customerID: 0,),
         ),
         body: Container(
             padding: const EdgeInsets.all(20),

@@ -3,9 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kieser/model/lib/machine.dart';
-// import 'package:intl/intl.dart';
-import 'package:kieser/model/lib/training_data.dart';
+import 'package:kieser/model/lib/customer.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/handle_results.dart';
 import 'package:kieser/src/tab_content.dart';
@@ -37,7 +35,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
   late TabController _tabController;
   List<Widget> tabContents = <Widget>[];
   Map<String, dynamic> _customerDetail = {};
-  Map<String, dynamic> _machineDetail = {};
   bool _showFAB = false;
   String _title = '';
 
@@ -53,25 +50,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
       tabList.add(tab);
     }
     return tabList;
-  }
-
-  Future<void> _getCustomerDetail() async {
-    final StoreRef customersStore = intMapStoreFactory.store("customers");
-    final Finder finder =
-        Finder(filter: Filter.equals('customerID', widget.customerID));
-    var record = await customersStore.find(widget.database, finder: finder);
-    _customerDetail = record[0].value as Map<String, dynamic>;
-  }
-
-  Future<void> _getMachineDetail(String machineID) async {
-    final StoreRef machinesStore = intMapStoreFactory.store("machines");
-    final Finder finder = Finder(filter: Filter.equals('id', machineID));
-    Map<String, dynamic> result = {};
-    var record = await machinesStore.find(widget.database, finder: finder);
-
-    if (record.isNotEmpty) {
-      _machineDetail = record[0].value as Map<String, dynamic>;
-    }
   }
 
   Future<void> _getStations() async {
@@ -93,9 +71,11 @@ class TrainingsPlanState extends State<TrainingsPlan>
     tabContents = [];
 
     for (Map<String, dynamic> station in _stations) {
-      _getMachineDetail(station['machineID']);
       tabContents.add(TabContent(
-          widget.database, widget.customerID, _machineDetail, moveForward));
+          database: widget.database,
+          customerID: widget.customerID,
+          machineID: station['machineID'],
+          moveForward: _moveForward));
     }
     return TabBarView(controller: tabController, children: tabContents);
   }
@@ -121,11 +101,9 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   @override
   void initState() {
-    _getCustomerDetail();
     _getStations();
-    // _getCustomerDetail().whenComplete(() {
     _title =
-        'Trainings-Plan für\n${_customerDetail["name"]} (${widget.customerID})';
+        'Trainings-Plan für\n!customerName! (${widget.customerID})';
     // });
     _fab = Visibility(
         child: FloatingActionButton(
@@ -133,10 +111,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
       onPressed: _saveResults,
       child: const Icon(Icons.save),
     ));
-
-    _tabController =
-        TabController(length: _stations.length, initialIndex: 0, vsync: this);
-    _tabController.addListener(_handleTabSelection);
     super.initState();
   }
 
@@ -149,16 +123,19 @@ class TrainingsPlanState extends State<TrainingsPlan>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: KieserAppBar(title: _title),
+      appBar: KieserAppBar(database: widget.database, customerID: widget.customerID, title: _title,),
       body: FutureBuilder<void>(
           future: Future.wait(
-              [_getAutoForward(), _getStations(), _getCustomerDetail()]),
+              [_getAutoForward(), _getStations()]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                   child: CircularProgressIndicator(color: Colors.blue));
             }
             if (snapshot.connectionState == ConnectionState.done) {
+              _tabController = TabController(
+                  length: _stations.length, initialIndex: 0, vsync: this);
+              _tabController.addListener(_handleTabSelection);
               return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,

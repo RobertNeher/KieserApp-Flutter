@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:kieser/model/lib/customer.dart';
 import 'package:kieser/src/settings_page.dart';
+import 'package:sembast/sembast.dart';
 
 class KieserAppBar extends StatefulWidget with PreferredSizeWidget {
-  KieserAppBar({Key? key, required this.title}) : super(key: key);
+  KieserAppBar(
+      {Key? key,
+      required this.database,
+      required this.customerID,
+      required this.title})
+      : super(key: key);
+  final Database database;
+  final int customerID;
   final String title;
 
   @override
@@ -14,25 +23,55 @@ class KieserAppBar extends StatefulWidget with PreferredSizeWidget {
 class _KieserAppBarState extends State<KieserAppBar> {
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> _customerDetail = {};
+
+    Future<void> _getCustomerDetail() async {
+      Customer customer = Customer(widget.database);
+      _customerDetail = await customer.findByID(widget.customerID);
+    }
+
     return AppBar(
-      title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/logo/kieser.png',
-              height: 70,
-              width: 90,
-            ),
-            Text(
-              widget.title,
-              style: const TextStyle(
-                  fontFamily: "Railway",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                  color: Colors.white),
-            ),
-          ]),
+      title: FutureBuilder<void>(
+          future: _getCustomerDetail(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                  child: CircularProgressIndicator(
+                      backgroundColor: Colors.blue, strokeWidth: 5));
+            }
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (widget.customerID > 0) {
+                widget.title
+                    .replaceAll('!customerName!', _customerDetail['name']);
+              }
+              return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/logo/kieser.png',
+                      height: 70,
+                      width: 90,
+                    ),
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                          fontFamily: "Railway",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                          color: Colors.white),
+                    ),
+                  ]);
+            } else {
+              return const Center(
+                  child: Text('Something went wrong!',
+                      style: TextStyle(
+                          // fontFamily: 'Railway',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.red)));
+            }
+          }),
     );
   }
 }

@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/handle_results.dart';
+import 'package:sembast/sembast.dart';
 
 class ResultsPage extends StatefulWidget {
-  const ResultsPage({super.key, required this.title, required this.customerID});
+  const ResultsPage({
+    super.key,
+    required this.database,
+    required this.title,
+    required this.customerID,
+  });
   final String title;
   final int customerID;
+  final Database database;
 
   @override
   State<ResultsPage> createState() => _ResultsPageState();
@@ -66,7 +73,7 @@ class _ResultsPageState extends State<ResultsPage> {
         child: Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(40),
-              child: KieserAppBar(title: widget.title),
+              child: KieserAppBar(database: widget.database, customerID: widget.customerID, title: widget.title),
             ),
             body: Container(
                 padding: const EdgeInsets.all(20),

@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:kieser/src/settings_page.dart';
 import 'package:kieser/src/results_page.dart';
 import 'package:kieser/src/handle_results.dart';
+import 'package:sembast/sembast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Widget KieserDrawer(BuildContext context) {
-  int _customerID = 0;
+Widget KieserDrawer(BuildContext context, Database database) {
+  int customerID = 0;
   void _getPref() async {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
 
     if (prefs.containsKey('CUSTOMER_ID')) {
-      _customerID = prefs.getInt('CUSTOMER_ID')!;
+      customerID = prefs.getInt('CUSTOMER_ID')!;
     }
   }
 
@@ -30,7 +31,7 @@ Widget KieserDrawer(BuildContext context) {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      const SettingsPage(title: "Einstellungen"),
+                      SettingsPage(database: database, title: "Einstellungen"),
                 ));
           },
         ),
@@ -42,7 +43,7 @@ Widget KieserDrawer(BuildContext context) {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ResultsPage(
-                      customerID: _customerID, title: "Letzte Ergebnisse"),
+                      database: database, customerID: customerID, title: "Letzte Ergebnisse"),
                 ));
           },
         ),
@@ -50,7 +51,7 @@ Widget KieserDrawer(BuildContext context) {
           leading: const Icon(Icons.remove),
           title: const Text('Löschen aller Daten'),
           onTap: () {
-            ConfirmDeletionDialog(context, _customerID);
+            ConfirmDeletionDialog(context, customerID);
           },
         ),
       ]));

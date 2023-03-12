@@ -43,8 +43,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: KieserAppBar(title: widget.title),
-        drawer: KieserDrawer(context),
+        appBar: KieserAppBar(database: widget.database, customerID: 0, title: 'Login'),
+        drawer: KieserDrawer(context, widget.database),
         body: Container(
             width: 500,
             height: 400,

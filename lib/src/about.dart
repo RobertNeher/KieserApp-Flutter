@@ -5,8 +5,8 @@ import 'package:kieser/src/login.dart';
 import 'package:sembast/sembast.dart';
 
 class AboutPage extends StatefulWidget {
-  AboutPage({super.key, required this.title, required this.database});
-  final Database database;
+  AboutPage({super.key, required this.title, this.database});
+  final Database? database;
   final String title;
 
   @override
@@ -17,7 +17,7 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: KieserAppBar(title: widget.title),
+        appBar: KieserAppBar(database: widget.database!, customerID: 0, title: 'About KieserApp'),
         body: Container(
             alignment: Alignment.topCenter,
             child: Column(
@@ -49,7 +49,7 @@ class _AboutPageState extends State<AboutPage> {
                             MaterialPageRoute(
                                 builder: (context) => LoginPage(
                                     title: 'Login',
-                                    database: widget.database)));
+                                    database: widget.database!)));
                       })
                 ])));
   }
