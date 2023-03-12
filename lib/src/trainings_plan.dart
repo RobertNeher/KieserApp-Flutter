@@ -33,7 +33,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
   List<Map<String, dynamic>> _stations = [];
   late TabController _tabController;
   List<Widget> tabContents = <Widget>[];
-  Map<String, dynamic> _customerDetail = {};
   bool _showFAB = false;
   String _title = '';
 
@@ -101,8 +100,8 @@ class TrainingsPlanState extends State<TrainingsPlan>
   @override
   void initState() {
     _getStations();
-    _title =
-        'Trainings-Plan für\n!customerName! (${widget.customerID})';
+        _title =
+            'Trainings-Plan für\n!customerName! (${widget.customerID})';
     // });
     _fab = Visibility(
         child: FloatingActionButton(

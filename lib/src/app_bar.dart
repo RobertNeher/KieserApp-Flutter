@@ -40,9 +40,12 @@ class _KieserAppBarState extends State<KieserAppBar> {
                       backgroundColor: Colors.blue, strokeWidth: 5));
             }
             if (snapshot.connectionState == ConnectionState.done) {
+              String title = '';
               if (widget.customerID > 0) {
-                widget.title
-                    .replaceAll('!customerName!', _customerDetail['name']);
+                title = widget.title
+                    .replaceFirst('!customerName!', _customerDetail['name']);
+              } else {
+                title = widget.title;
               }
               return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +57,7 @@ class _KieserAppBarState extends State<KieserAppBar> {
                       width: 90,
                     ),
                     Text(
-                      widget.title,
+                      title,
                       style: const TextStyle(
                           fontFamily: "Railway",
                           fontWeight: FontWeight.bold,
