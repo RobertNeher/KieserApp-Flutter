@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:sembast/sembast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key, required this.title, required this.database});
@@ -15,7 +15,8 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final GlobalKey _formKey = GlobalKey<FormState>();
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  late final Preferences preferences;
+  // final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   int _customerID = 0;
   int _defaultDuration = 0;
   bool _autoForward = false;
@@ -27,38 +28,33 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
+    preferences = Preferences(widget.database);
     _getPrefs();
   }
 
   void _setPrefs() async {
-    final SharedPreferences prefs = await _prefs;
-    if (_tec_customerID.text.isNotEmpty) {
-      prefs.setInt('CUSTOMER_ID', _customerID);
-      _tec_customerID.text = _customerID.toString();
-    }
-    if (_tec_defaultDuration.text.isNotEmpty) {
-      prefs.setInt('DEFAULT_DURATION', _defaultDuration);
-      _tec_defaultDuration.text = _defaultDuration.toString();
-    }
-    if (_tec_autoForward.text.isNotEmpty) {
-      prefs.setBool('AUTOFORWARD', _autoForward);
-      _tec_autoForward.text = _autoForward.toString();
-    }
-    setState(() {});
+    StoreRef prefsStore = intMapStoreFactory.store("preferences");
+    Map<String, dynamic> prefData = {};
+
+    _tec_customerID.text = preferences.customerID.toString();
+    _tec_defaultDuration.text = preferences.defaultDuration.toString();
+    _tec_autoForward.text = preferences.autoForward.toString();
+
+    prefData = {
+      'customerID': int.parse(_tec_customerID.text),
+      'defaultDuration': int.parse(_tec_defaultDuration.text),
+      'autoForward': _tec_autoForward.text.isNotEmpty
+    };
+    print(prefData);
+    await prefsStore.update(widget.database, prefData);
   }
 
-  void _getPrefs() async {
-    final SharedPreferences prefs = await _prefs;
+  void _getPrefs() {
+    // Preferences preferences = Preferences(widget.database);
+    _customerID = preferences.customerID;
+    _defaultDuration = preferences.defaultDuration;
+    _autoForward = preferences.autoForward;
 
-    if (prefs.containsKey('CUSTOMER_ID')) {
-      _customerID = prefs.getInt('CUSTOMER_ID')!;
-    }
-    if (prefs.containsKey('DEFAULT_DURATION')) {
-      _defaultDuration = prefs.getInt('DEFAULT_DURATION')!;
-    }
-    if (prefs.containsKey('AUTOFORWARD')) {
-      _autoForward = prefs.getBool('AUTOFORWARD')!;
-    }
     _tec_customerID.text = _customerID.toString();
     _tec_defaultDuration.text = _defaultDuration.toString();
     _tec_autoForward.text = _autoForward.toString();
@@ -69,7 +65,11 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(40),
-          child: KieserAppBar(title: widget.title, database: widget.database, customerID: 0,),
+          child: KieserAppBar(
+            title: widget.title,
+            database: widget.database,
+            customerID: 0,
+          ),
         ),
         body: Container(
             padding: const EdgeInsets.all(20),

@@ -1,3 +1,4 @@
+import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/settings/lib/settings.dart';
 import 'package:kieser/model/lib/customer.dart';
 import 'package:kieser/model/lib/machine.dart';
@@ -6,23 +7,33 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 
 void main(List<String> args) async {
-  Database database = await databaseFactoryIo.openDatabase('./$DB_FILE');
-  final StoreRef machinesStore = intMapStoreFactory.store("machines");
-  Machine m = Machine(database);
-  print(await m.getAll());
-  print(await m.findByID('A 3'));
+  Database database = await databaseFactoryIo.openDatabase(DB_FILE);
+  // Map<String, dynamic> prefs = PREFERENCES_DATASET[0];
+  StoreRef prefsStore = intMapStoreFactory.store("preferences");
+  Preferences prefs = await Preferences(database);
 
-  // Finder finder = Finder(filter: Filter.equals('id', args[0]));
-  // var records = await machinesStore.find(database) as Iterable;
-  // Map<String, dynamic> result = {};
+  // int counter = prefs.getDefaultDuration + 1;
+  // print(counter);
+  print(prefs);
 
-  // for (RecordSnapshot machine in records) {
-  //   print('${machine.value["id"]}:${args[0]}');
-  //   if (machine.value['id'] == args[0]) {
-  //     result = machine.value as Map<String, dynamic>;
-  //     print(result);
-  //     break;
-  //   }
-  // }
-  // print(result['id']);
+  // Map<String, dynamic> data = {
+  //   'customerID': preferences.getCustomerID,
+  //   'defaultDuration': preferences.getDefaultDuration,
+  //   'autoForward': preferences.getAutoForward,
+  // };
+  // print(preferences.defaultDuration);
+  // print(preferences.autoForward);
+  // print(preferences.customerID);
+  // print(data);
+  // await prefsStore.update(await database, data);
+
+  // var record = await prefsStore.find(database);
+
+  // print(record);
+
+  // result = await prefsStore.update(database, !preferences.autoForward,
+  //     finder: finder);
+  // print(preferences.defaultDuration);
+  // print(preferences.autoForward);
+  // print(preferences.customerID);
 }

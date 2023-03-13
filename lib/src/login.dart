@@ -3,10 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/drawer.dart';
 import 'package:kieser/src/trainings_plan.dart';
+import 'package:model/preferences.dart';
 import 'package:sembast/sembast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-// import '../model/lib/customer.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title, required this.database});
@@ -18,32 +16,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final GlobalKey _formKey = GlobalKey<FormState>();
   Map<String, dynamic> customerDetail = {};
+  late Preferences preferences;
   int _customerID = 0;
   late TextEditingController tec;
 
   @override
   void initState() {
-    _getPref();
+    preferences = Preferences(widget.database);
+    _customerID = preferences.findByID('customerID');
     tec = TextEditingController(text: _customerID.toString());
     super.initState();
-  }
-
-  void _getPref() async {
-    final SharedPreferences prefs = await _prefs;
-
-    _customerID = prefs.getInt('CUSTOMER_ID')!;
-    if (int.tryParse(tec.text) == 0) {
-      tec.text = _customerID.toString();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: KieserAppBar(database: widget.database, customerID: 0, title: 'Login'),
+        appBar: KieserAppBar(
+            database: widget.database, customerID: 0, title: 'Login'),
         drawer: KieserDrawer(context, widget.database),
         body: Container(
             width: 500,

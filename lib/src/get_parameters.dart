@@ -61,6 +61,7 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
             ));
           }
           if (snapshot.connectionState == ConnectionState.done) {
+            print('${parameters.length}:${parameterValues.length}');
             for (i = 0; i < parameters.length - 1; i++) {
               tableRows.add(TableRow(children: [
                 TableCell(

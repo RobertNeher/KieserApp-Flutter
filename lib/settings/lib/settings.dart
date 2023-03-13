@@ -198,7 +198,7 @@ const List<Map<String, dynamic>> PLAN_DATASET = [
     "stations": [
       {
         "machineID": "A 3",
-        "parameterValues": ["2", "2", "4"],
+        "parameterValues": ["2", "3", "4"],
         "movement": "",
         "comments": ""
       },
@@ -261,6 +261,158 @@ const List<Map<String, dynamic>> PLAN_DATASET = [
         "parameterValues": ["9"],
         "movement": "",
         "comments": ""
+      }
+    ]
+  }
+];
+
+const List<Map<String, dynamic>> PREFERENCES_DATASET = [
+  {
+    "customerID": 19711,
+    "defaultDuration": 120,
+    "autoForward": false
+  }
+];
+
+const List<Map<String, dynamic>> RESULTS_DATASET = [
+  {
+  "customerID": 19711,
+  "trainings": [
+      {
+          "trainingDate": "2023-01-29",
+          "results": [
+              {
+                  "machineID": "B 1",
+                  "duration": 120,
+                  "weightDone": "110",
+                  "weightPlanned": 0
+              },
+              {
+                  "machineID": "B 7",
+                  "duration": 120,
+                  "weightDone": "110",
+                  "weightPlanned": 0
+              },
+              {
+                  "machineID": "F 2.1",
+                  "duration": 120,
+                  "weightDone": "86",
+                  "weightPlanned": 0
+              },
+              {
+                  "machineID": "F 3.1",
+                  "duration": 120,
+                  "weightDone": "88",
+                  "weightPlanned": 0
+              },
+              {
+                  "machineID": "C 1",
+                  "duration": 120,
+                  "weightDone": "88",
+                  "weightPlanned": 0
+              },
+              {
+                  "machineID": "C 3",
+                  "duration": 120,
+                  "weightDone": "180",
+                  "weightPlanned": 0
+              },
+              {
+                  "machineID": "C 7",
+                  "duration": 120,
+                  "weightDone": "92",
+                  "weightPlanned": 0
+              },
+              {
+                  "machineID": "D 5",
+                  "duration": 120,
+                  "weightDone": "68",
+                  "weightPlanned": 0
+              },
+              {
+                  "machineID": "D 6",
+                  "duration": 120,
+                  "weightDone": "92",
+                  "weightPlanned": 0
+              },
+              {
+                  "machineID": "H 1",
+                  "duration": 120,
+                  "weightDone": "62",
+                  "weightPlanned": 0
+              }
+            ]
+      },
+      {
+          "trainingDate": "2023-03-05",
+          "results": [
+              {
+                  "machineID": "A 3",
+                  "duration": 120,
+                  "weightDone": 70,
+                  "weightPlanned": 70
+              },
+              {
+                  "machineID": "B 6",
+                  "duration": 120,
+                  "weightDone": 390,
+                  "weightPlanned": 410
+              },
+              {
+                  "machineID": "F 1.1",
+                  "duration": 120,
+                  "weightDone": 50,
+                  "weightPlanned": 50
+              },
+              {
+                  "machineID": "F 2.1",
+                  "duration": 120,
+                  "weightDone": 94,
+                  "weightPlanned": 94
+              },
+              {
+                  "machineID": "F 3.1",
+                  "duration": 120,
+                  "weightDone": 94,
+                  "weightPlanned": 94
+              },
+              {
+                  "machineID": "C 1",
+                  "duration": 120,
+                  "weightDone": 94,
+                  "weightPlanned": 94
+              },
+              {
+                  "machineID": "C 3",
+                  "duration": 120,
+                  "weightDone": 186,
+                  "weightPlanned": 186
+              },
+              {
+                  "machineID": "C 7",
+                  "duration": 120,
+                  "weightDone": 96,
+                  "weightPlanned": 96
+              },
+              {
+                  "machineID": "D 5",
+                  "duration": 120,
+                  "weightDone": 76,
+                  "weightPlanned": 76
+              },
+              {
+                  "machineID": "D 6",
+                  "duration": 120,
+                  "weightDone": 94,
+                  "weightPlanned": 94
+              },
+              {
+                  "machineID": "H 1",
+                  "duration": 120,
+                  "weightDone": 62,
+                  "weightPlanned": 62
+              }
+            ]
       }
     ]
   }
