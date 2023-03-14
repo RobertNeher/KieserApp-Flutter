@@ -18,14 +18,21 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey _formKey = GlobalKey<FormState>();
   Map<String, dynamic> customerDetail = {};
-  late Preferences preferences;
+  Map<String, dynamic> preferences = {};
   int _customerID = 0;
   late TextEditingController tec;
 
+  Future<Map<String, dynamic>> _getPrefs() async {
+    StoreRef prefsStore = intMapStoreFactory.store("preferences");
+    var record = await prefsStore.find(widget.database);
+    preferences = record[0].value as Map<String, dynamic>;
+    return preferences;
+  }
+
   @override
   void initState() {
-    preferences = Preferences(widget.database);
-    _customerID = preferences.findByID('customerID');
+    _getPrefs();
+    _customerID = preferences['customerID'];
     tec = TextEditingController(text: _customerID.toString());
     super.initState();
   }
