@@ -1,4 +1,5 @@
 import 'package:sembast/sembast.dart';
+import 'package:sembast/sembast_io.dart';
 
 import 'package:settings/settings.dart';
 
@@ -6,12 +7,13 @@ void initializeApp(Database database) async {
   final StoreRef customersStore = intMapStoreFactory.store("customers");
   final StoreRef machinesStore = intMapStoreFactory.store("machines");
   final StoreRef plansStore = intMapStoreFactory.store("plans");
+  final StoreRef resultsStore = intMapStoreFactory.store("results");
   final StoreRef prefsStore = intMapStoreFactory.store("preferences");
 
   await customersStore.delete(database);
   await machinesStore.delete(database);
   await plansStore.delete(database);
-  await prefsStore.delete(database);
+  await resultsStore.delete(database);
 
   for (Map<String, dynamic> customer in CUSTOMER_DATASET) {
     await customersStore.add(database, customer);
@@ -28,4 +30,15 @@ void initializeApp(Database database) async {
   for (Map<String, dynamic> pref in PREFERENCES_DATASET) {
     await prefsStore.add(database, pref);
   }
+
+  for (Map<String, dynamic> result in RESULTS_DATASET) {
+    await resultsStore.add(database, result);
+  }
+}
+
+void main(List<String> args) async {
+  final Database database = await databaseFactoryIo.openDatabase(DB_FILE);
+
+  initializeApp(database);
+  print('Initialization of database ($DB_FILE) done');
 }

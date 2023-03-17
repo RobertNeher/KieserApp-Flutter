@@ -4,29 +4,22 @@ class Preferences {
   late final Database _database;
   late StoreRef _prefDataStore;
   Map<String, dynamic> prefData = {};
-  var record;
 
   Preferences(Database database) {
     _database = database;
     _prefDataStore = intMapStoreFactory.store("preferences");
-
-    _loadPrefs();
-
-    if (record.length > 0) {
-      prefData = record[0].value as Map<String, dynamic>;
-    } else {
-      prefData = {};
-    }
   }
 
-  void _loadPrefs() async {
-    record = await _prefDataStore.find(_database);
+  Future<Map<String, dynamic>> loadPrefs() async {
+    var record = await _prefDataStore.find(_database);
+    prefData = record[0].value as Map<String, dynamic>;
+    return prefData;
   }
 
-  void savePrefs() async {
-    record = await _prefDataStore.find(_database);
+  Future<int> savePrefs(Map<String, dynamic> data) async {
+    var record = await _prefDataStore.find(_database);
 
-    await _prefDataStore.update(_database, prefData);
+    return await _prefDataStore.update(_database, data);
   }
 
   int get defaultDuration {

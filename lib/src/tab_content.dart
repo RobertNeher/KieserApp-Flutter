@@ -139,7 +139,8 @@ class _TabContentState extends State<TabContent> {
                         thickness: 1,
                         color: Colors.blue,
                       ),
-                      TrainingResultForm(_machineDetail, widget.moveForward)
+                      TrainingResultForm(_machineDetail, widget.database,
+                          widget.customerID, widget.moveForward)
                     ]);
               } else {
                 return const Center(

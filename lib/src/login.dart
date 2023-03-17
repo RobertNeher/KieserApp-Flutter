@@ -23,69 +23,82 @@ class _LoginPageState extends State<LoginPage> {
   late TextEditingController tec;
 
   Future<Map<String, dynamic>> _getPrefs() async {
-    StoreRef prefsStore = intMapStoreFactory.store("preferences");
-    var record = await prefsStore.find(widget.database);
-    preferences = record[0].value as Map<String, dynamic>;
+    Preferences p = Preferences(widget.database);
+    preferences = await p.loadPrefs();
+    _customerID = preferences['customerID'];
+    tec = TextEditingController(text: _customerID.toString());
     return preferences;
   }
 
   @override
-  void initState() {
-    _getPrefs();
-    _customerID = preferences['customerID'];
-    tec = TextEditingController(text: _customerID.toString());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: KieserAppBar(
-            database: widget.database, customerID: 0, title: 'Login'),
-        drawer: KieserDrawer(context, widget.database),
-        body: Container(
-            width: 500,
-            height: 400,
-            color: Colors.white,
-            alignment: Alignment.topCenter,
-            child: Form(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                  TextFormField(
-                    key: _formKey,
-                    controller: tec,
-                    maxLines: 1,
-                    style: const TextStyle(
-                        fontFamily: "Railway",
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                        color: Colors.black),
-                    decoration: const InputDecoration(labelText: "Customer ID"),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    onChanged: (number) {
-                      _customerID = int.tryParse(number)!;
-                    },
-                  ),
-                  const Spacer(),
-                  ElevatedButton(
-                      child: const Text('Login'),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          if (tec.text.isNotEmpty) {
-                            _customerID = int.parse(tec.text);
-                          }
+    return FutureBuilder<Map<String, dynamic>>(
+        future: _getPrefs(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: CircularProgressIndicator(
+                    backgroundColor: Colors.blue, strokeWidth: 5));
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Scaffold(
+                appBar: KieserAppBar(
+                    database: widget.database, customerID: 0, title: 'Login'),
+                drawer: KieserDrawer(context, widget.database),
+                body: Container(
+                    width: 500,
+                    height: 400,
+                    color: Colors.white,
+                    alignment: Alignment.topCenter,
+                    child: Form(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                          TextFormField(
+                            key: _formKey,
+                            controller: tec,
+                            maxLines: 1,
+                            style: const TextStyle(
+                                fontFamily: "Railway",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                color: Colors.black),
+                            decoration:
+                                const InputDecoration(labelText: "Customer ID"),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: (number) {
+                              _customerID = int.tryParse(number)!;
+                            },
+                          ),
+                          const Spacer(),
+                          ElevatedButton(
+                              child: const Text('Login'),
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  if (tec.text.isNotEmpty) {
+                                    _customerID = int.parse(tec.text);
+                                  }
 
-                          return TrainingsPlan(
-                              database: widget.database,
-                              customerID: _customerID);
-                        }));
-                      }),
-                ]))));
+                                  return TrainingsPlan(
+                                      database: widget.database,
+                                      customerID: _customerID);
+                                }));
+                              }),
+                        ]))));
+          } else {
+            return const Center(
+                child: Text('Something went wrong!',
+                    style: TextStyle(
+                        // fontFamily: 'Railway',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.red)));
+          }
+        });
   }
 }
