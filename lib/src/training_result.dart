@@ -20,15 +20,13 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
     lastResult = await r.getLatest();
   }
 
-  Future<Map<String, dynamic>> getMachineDetail(String machineID) async {
+  Future<Map<String, dynamic>> getStationResult(String machineID) async {
     Result r = Result(database, customerID);
     Map<String, dynamic> latestResult = await r.getLatest();
-    List<Map<String, dynamic>> machines =
-        latestResult['results'] as List<Map<String, dynamic>>;
 
-    for (Map<String, dynamic> _machine in machines) {
-      if (_machine['machineID'] == machine['id']) {
-        return machine;
+    for (Map<String, dynamic> station in latestResult['results']) {
+      if (station['machineID'] == machineID) {
+        return station;
       }
     }
     return {};
@@ -41,7 +39,7 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
     preferences = await p.loadPrefs();
 
     int defaultDuration = preferences['defaultDuration'];
-    Map<String, dynamic> defaults = await getMachineDetail(machine['id']);
+    Map<String, dynamic> defaults = await getStationResult(machine['id']);
     if (_tecDuration.text.isEmpty) {
       _tecDuration.text =
           (defaults['duration'] == null || defaults['duration'] == 0)
