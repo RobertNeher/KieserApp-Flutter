@@ -44,8 +44,8 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
     super.initState();
     trainingsPlan = Plan(widget.database, widget.customerID);
     machines = Machine(widget.database);
-    _getParameters();
-    _getParameterValues();
+    // _getParameters();
+    // _getParameterValues();
   }
 
   @override
@@ -61,12 +61,11 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
             ));
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            print('${parameters.length}:${parameterValues.length}');
-            for (i = 0; i < parameters.length - 1; i++) {
+            for (i = 0; i < parameters.length; i++) {
               tableRows.add(TableRow(children: [
                 TableCell(
                     verticalAlignment: TableCellVerticalAlignment.top,
-                    child: Container(
+                    child: SizedBox(
                         // width: 40,
                         height: ROW_HEIGHT,
                         child: Text(parameters[i],
@@ -91,7 +90,7 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
                   verticalAlignment: TableCellVerticalAlignment.top,
                   child: SizedBox(
                       height: ROW_HEIGHT,
-                      child: Text("Notizen",
+                      child: Text("Bewegung",
                           style: TextStyle(
                               fontFamily: "Railway",
                               fontWeight: FontWeight.bold,
@@ -100,6 +99,28 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
               TableCell(
                 verticalAlignment: TableCellVerticalAlignment.top,
                 child: Text(parameterValues[i],
+                    style: const TextStyle(
+                        fontFamily: "Railway",
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                        color: Colors.white)),
+              )
+            ]));
+            print('${i}:${parameters.length}:${parameterValues.length}');
+            tableRows.add(TableRow(children: [
+              const TableCell(
+                  verticalAlignment: TableCellVerticalAlignment.top,
+                  child: SizedBox(
+                      height: ROW_HEIGHT,
+                      child: Text("Notizen",
+                          style: TextStyle(
+                              fontFamily: "Railway",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.white)))),
+              TableCell(
+                verticalAlignment: TableCellVerticalAlignment.top,
+                child: Text(parameterValues[i + 1],
                     style: const TextStyle(
                         fontFamily: "Railway",
                         fontWeight: FontWeight.normal,
