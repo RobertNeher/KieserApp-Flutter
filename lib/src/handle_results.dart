@@ -20,13 +20,12 @@ Future<List<Map<String, dynamic>>> getTrainingResults(int customerID) async {
 
   var temp = await resultsStore.find(database);
 
-  if (temp.length > 0) {
+  if (temp.isNotEmpty) {
     Iterable resultList = temp[0]['trainings'] as Iterable;
     for (var entry in resultList) {
       results.add(entry as Map<String, dynamic>);
     }
   }
-
   return results;
 }
 
