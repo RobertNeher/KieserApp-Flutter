@@ -24,14 +24,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
   TextEditingController _tec_customerID = TextEditingController();
   TextEditingController _tec_defaultDuration = TextEditingController();
-  TextEditingController _tec_autoForward = TextEditingController();
 
   Future<Map<String, dynamic>> _loadPrefs() async {
     Preferences p = Preferences(widget.database);
     preferences = await p.loadPrefs();
     _tec_customerID.text = preferences['customerID'].toString();
     _tec_defaultDuration.text = preferences['defaultDuration'].toString();
-    _tec_autoForward.text = preferences['autoForward'].toString();
+    _autoForward = preferences['autoForward'];
 
     return preferences;
   }
@@ -40,7 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Map<String, dynamic> values = {
       'customerID': int.parse(_tec_customerID.text),
       'defaultDuration': int.parse(_tec_defaultDuration.text),
-      'autoForward': _tec_autoForward.text.isEmpty
+      'autoForward': _autoForward,
     };
     StoreRef prefDataStore = intMapStoreFactory.store("preferences");
     var record = await prefDataStore.find(widget.database);
@@ -92,7 +91,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 onChanged: (value) {
                                   if (value.isNotEmpty) {
                                     _customerID = int.parse((value));
-                                    // _setPrefs();
                                   }
                                 },
                               ),
@@ -100,7 +98,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 onChanged: (value) {
                                   if (value.isNotEmpty) {
                                     _defaultDuration = int.parse(value);
-                                    // _setPrefs();
                                   }
                                 },
                                 controller: _tec_defaultDuration,
@@ -117,21 +114,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                   FilteringTextInputFormatter.digitsOnly
                                 ],
                               ),
-                              // const Spacer(),
                               FormField(
                                 builder: (FormFieldState<dynamic> field) {
                                   return CheckboxListTile(
                                     value: _autoForward,
-                                    onChanged: (val) {
-                                      if (_autoForward == false) {
+                                    onChanged: (bool? value) {
                                         setState(() {
-                                          _autoForward = true;
+                                          _autoForward = value!;
                                         });
-                                      } else if (_autoForward == true) {
-                                        setState(() {
-                                          _autoForward = false;
-                                        });
-                                      }
                                     },
                                     title: const Text(
                                       'Automatisches Weiterspringen',

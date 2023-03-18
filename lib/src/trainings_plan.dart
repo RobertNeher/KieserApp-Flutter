@@ -3,12 +3,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/handle_results.dart';
 import 'package:kieser/src/tab_content.dart';
 import 'package:model/plan.dart';
 import 'package:sembast/sembast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TrainingsPlan extends StatefulWidget {
   const TrainingsPlan({
@@ -27,11 +27,11 @@ class TrainingsPlanState extends State<TrainingsPlan>
     with
         TickerProviderStateMixin,
         AutomaticKeepAliveClientMixin<TrainingsPlan> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  static late Visibility _fab;
+  late Visibility _fab;
   static bool _autoForward = false;
   List<Map<String, dynamic>> _stations = [];
   late TabController _tabController;
+  Map<String, dynamic> _preferences = {};
   List<Widget> tabContents = <Widget>[];
   bool _showFAB = false;
   String _title = '';
@@ -55,12 +55,10 @@ class TrainingsPlanState extends State<TrainingsPlan>
     _stations = await plan.getStations();
   }
 
-  Future<void> _getAutoForward() async {
-    SharedPreferences prefs = await _prefs;
-
-    _autoForward = (prefs.containsKey('AUTOFORWARD'))
-        ? prefs.getBool('AUTOFORWARD')!
-        : false;
+  Future<void> _getPrefs() async {
+    Preferences p = Preferences(widget.database);
+    print('getPrefs: ${p.autoForward}');
+    _autoForward = p.autoForward;
   }
 
   Widget _getTabContent(
@@ -82,23 +80,27 @@ class TrainingsPlanState extends State<TrainingsPlan>
   }
 
   void _handleTabSelection() {
-      if (_tabController.indexIsChanging) {
-        _showFAB = (_tabController.index == _stations.length - 1);
-      }
+    if (_tabController.indexIsChanging) {
+      _showFAB = (_tabController.index == _stations.length - 1);
+    }
+    print('handle: $_showFAB:${_tabController.index}:$_autoForward');
   }
 
   _moveForward() {
+    _showFAB = (_tabController.index == _stations.length - 1);
+    print(
+        'move: $_showFAB:${_tabController.index}:$_autoForward:${_stations.length}');
     if (_autoForward && (_tabController.index < _stations.length - 1)) {
-      _tabController.index += 1;
+      print('move');
+      _tabController.animateTo(_tabController.index + 1);
     }
     return;
   }
 
   @override
   void initState() {
-    _getStations();
-        _title =
-            'Trainings-Plan für\n!customerName! (${widget.customerID})';
+    _getPrefs();
+    _title = 'Trainings-Plan für\n!customerName! (${widget.customerID})';
     _fab = Visibility(
         child: FloatingActionButton(
       backgroundColor: Colors.blue,
@@ -117,10 +119,14 @@ class TrainingsPlanState extends State<TrainingsPlan>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: KieserAppBar(database: widget.database, customerID: widget.customerID, title: _title,),
+      appBar: KieserAppBar(
+        database: widget.database,
+        customerID: widget.customerID,
+        title: _title,
+      ),
+      floatingActionButton: _showFAB ? _fab : null,
       body: FutureBuilder<void>(
-          future: Future.wait(
-              [_getAutoForward(), _getStations()]),
+          future: Future.wait([_getPrefs(), _getStations()]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -163,7 +169,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
               return const Center(child: Text('Something went wrong!'));
             }
           }),
-      floatingActionButton: _showFAB ? _fab : null,
     );
   }
 

@@ -106,7 +106,6 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
                         color: Colors.white)),
               )
             ]));
-            print('${i}:${parameters.length}:${parameterValues.length}');
             tableRows.add(TableRow(children: [
               const TableCell(
                   verticalAlignment: TableCellVerticalAlignment.top,
