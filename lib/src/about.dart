@@ -38,7 +38,7 @@ class _AboutPageState extends State<AboutPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
                 appBar: KieserAppBar(
-                    database: widget.database!,
+                    database: widget.database,
                     customerID: 0,
                     title: 'About KieserApp'),
                 body: Container(
@@ -73,7 +73,7 @@ class _AboutPageState extends State<AboutPage> {
                                     MaterialPageRoute(
                                         builder: (context) => LoginPage(
                                             title: 'Login',
-                                            database: widget.database!)));
+                                            database: widget.database)));
                               })
                         ])));
           } else {
