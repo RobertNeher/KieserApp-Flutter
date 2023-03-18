@@ -62,7 +62,7 @@ const List<Map<String, dynamic>> MACHINE_DATASET = [
   {
     "id": "F 2.1",
     "title": "Bauchmuskel",
-    "parameters": ["Polster", "Loch", "Fuss"],
+    "parameters": ["Loch", "Fuss"],
     "affectedBodyParts": "<Bild>",
     "description": "",
     "tutorialVideoURL": ""
@@ -94,7 +94,7 @@ const List<Map<String, dynamic>> MACHINE_DATASET = [
   {
     "id": "C 7",
     "title": "-",
-    "parameters": ["Polster"],
+    "parameters": ["Sitz"],
     "affectedBodyParts": "<Bild>",
     "description": "",
     "tutorialVideoURL": ""
@@ -222,7 +222,7 @@ const List<Map<String, dynamic>> PLAN_DATASET = [
       },
       {
         "machineID": "F 3.1",
-        "parameterValues": ["1", "H7", "12", "10", "8", "N"],
+        "parameterValues": ["1", "H7", "12", "10", "8"],
         "movement": "",
         "comments": ""
       },
