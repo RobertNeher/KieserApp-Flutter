@@ -19,7 +19,7 @@ class ResultsPage extends StatefulWidget {
   State<ResultsPage> createState() => _ResultsPageState();
 }
 
-Widget getResultTable(Map<String, dynamic> trainingResult) {
+Widget _getResultTable(Map<String, dynamic> trainingResult) {
   for (Map<String, dynamic> result in trainingResult['results']) {
     TableRow tableRow = TableRow();
   }
@@ -49,7 +49,8 @@ class _ResultsPageState extends State<ResultsPage> {
 
   @override
   void initState() {
-    getTrainingResults(widget.customerID).then((value) => _results);
+    getTrainingResults(widget.database, widget.customerID)
+        .then((value) => _results);
 
     for (Map<String, dynamic> training in _results) {
       String tabTitle = _dfTab.format(DateTime.parse(training['trainingDate']));
@@ -61,7 +62,7 @@ class _ResultsPageState extends State<ResultsPage> {
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ))));
-      _resultTables.add(getResultTable(training));
+      _resultTables.add(_getResultTable(training));
     }
     super.initState();
   }
@@ -76,7 +77,7 @@ class _ResultsPageState extends State<ResultsPage> {
               child: KieserAppBar(database: widget.database, customerID: widget.customerID, title: widget.title),
             ),
             body: Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,7 +86,9 @@ class _ResultsPageState extends State<ResultsPage> {
                         tabs: _trainingTabs,
                       ),
                       const SizedBox(height: 10),
-                      TabBarView(children: _resultTables),
+                      SizedBox(
+                          height: 150,
+                          child: TabBarView(children: _resultTables)),
                       const SizedBox(height: 20),
                       Divider(height: 1, thickness: 10, color: Colors.blue),
                       const SizedBox(height: 20),

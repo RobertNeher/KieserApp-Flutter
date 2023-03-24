@@ -28,10 +28,9 @@ class TrainingsPlanState extends State<TrainingsPlan>
         TickerProviderStateMixin,
         AutomaticKeepAliveClientMixin<TrainingsPlan> {
   late Visibility _fab;
-  static bool _autoForward = false;
+  Map<String, dynamic> preferences = {};
   List<Map<String, dynamic>> _stations = [];
   late TabController _tabController;
-  Map<String, dynamic> _preferences = {};
   List<Widget> tabContents = <Widget>[];
   bool _showFAB = false;
   String _title = '';
@@ -55,10 +54,11 @@ class TrainingsPlanState extends State<TrainingsPlan>
     _stations = await plan.getStations();
   }
 
-  Future<void> _getPrefs() async {
+  Future<Map<String, dynamic>> _getPreferences() async {
     Preferences p = Preferences(widget.database);
-    print('getPrefs: ${p.autoForward}');
-    _autoForward = p.autoForward;
+    preferences = await p.loadPrefs();
+
+    return preferences;
   }
 
   Widget _getTabContent(
@@ -76,22 +76,20 @@ class TrainingsPlanState extends State<TrainingsPlan>
   }
 
   void _saveResults() {
-    saveResults(widget.customerID, DateTime.now(), context);
+    saveResults(widget.database, widget.customerID, DateTime.now(), context);
   }
 
   void _handleTabSelection() {
-    if (_tabController.indexIsChanging) {
-      _showFAB = (_tabController.index == _stations.length - 1);
+    _showFAB = false;
+    if (_tabController.index == _stations.length - 1) {
+      _showFAB = true;
+      setState(() {});
     }
-    print('handle: $_showFAB:${_tabController.index}:$_autoForward');
   }
 
-  _moveForward() {
-    _showFAB = (_tabController.index == _stations.length - 1);
-    print(
-        'move: $_showFAB:${_tabController.index}:$_autoForward:${_stations.length}');
-    if (_autoForward && (_tabController.index < _stations.length - 1)) {
-      print('move');
+  void _moveForward() {
+    if (preferences['autoForward'] &&
+        (_tabController.index < _stations.length - 1)) {
       _tabController.animateTo(_tabController.index + 1);
     }
     return;
@@ -99,7 +97,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   @override
   void initState() {
-    _getPrefs();
     _title = 'Trainings-Plan für\n!customerName! (${widget.customerID})';
     _fab = Visibility(
         child: FloatingActionButton(
@@ -124,9 +121,9 @@ class TrainingsPlanState extends State<TrainingsPlan>
         customerID: widget.customerID,
         title: _title,
       ),
-      floatingActionButton: _showFAB ? _fab : null,
+      floatingActionButton: _showFAB ? _fab : Container(),
       body: FutureBuilder<void>(
-          future: Future.wait([_getPrefs(), _getStations()]),
+          future: Future.wait([_getPreferences(), _getStations()]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(

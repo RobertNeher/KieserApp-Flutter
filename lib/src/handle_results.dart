@@ -1,53 +1,26 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:sembast_web/sembast_web.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kieser/model/lib/result.dart';
 import 'package:intl/intl.dart';
 import 'package:sembast/sembast.dart';
-import 'package:sembast/sembast_io.dart';
 
-Future<List<Map<String, dynamic>>> getTrainingResults(int customerID) async {
-  final Database database;
+Future<List<Map<String, dynamic>>> getTrainingResults(
+    Database database, int customerID) async {
   List<Map<String, dynamic>> results = [];
 
-  if (kIsWeb) {
-    database = await databaseFactoryWeb.openDatabase('assets/results.db');
-  } else {
-    database = await databaseFactoryIo.openDatabase('assets/results.db');
-  }
-  final StoreRef resultsStore = intMapStoreFactory.store("results_store");
+  Result _results = Result(database, customerID);
 
-  var temp = await resultsStore.find(database);
+  results = await _results.getAll();
 
-  if (temp.isNotEmpty) {
-    Iterable resultList = temp[0]['trainings'] as Iterable;
-    for (var entry in resultList) {
-      results.add(entry as Map<String, dynamic>);
-    }
-  }
   return results;
 }
 
-void saveResults(
-    int customerID, DateTime dateTime, BuildContext context) async {
-  // final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  // final SharedPreferences prefs = await _prefs;
+void saveResults(Database database, int customerID, DateTime dateTime,
+    BuildContext context) async {
   final DateFormat df = DateFormat('yyyy-MM-dd');
-  final Database database;
   final List<Map<String, dynamic>> results =
-      await getTrainingResults(customerID);
+      await getTrainingResults(database, customerID);
 
-  if (kIsWeb) {
-    database = await databaseFactoryWeb.openDatabase('assets/results.db');
-  } else {
-    database = await databaseFactoryIo.openDatabase('assets/results.db');
-  }
-
-  final StoreRef resultsStore = intMapStoreFactory.store("results_store");
-  // await resultsStore.delete(database);
-
-  // List<Map<String, dynamic>> resultMap = await getTrainingResults(customerID);
+  final StoreRef resultsStore = intMapStoreFactory.store("results");
   Map<String, dynamic> resultJson = {'customerID': customerID, 'trainings': []};
 
   resultJson['trainings']
@@ -62,17 +35,8 @@ void saveResults(
   );
 }
 
-void removeCustomerResults(int customerID) async {
-  final Database database;
-
-  if (kIsWeb) {
-    database = await databaseFactoryWeb.openDatabase('assets/results.db');
-  } else {
-    database = await databaseFactoryIo.openDatabase('assets/results.db');
-  }
-
-  final StoreRef resultsStore = intMapStoreFactory.store("results_store");
-
+void removeCustomerResults(Database database, int customerID) async {
+  final StoreRef resultsStore = intMapStoreFactory.store("results");
   Finder finder = Finder(filter: Filter.equals('customerID', customerID));
   await resultsStore.delete(database, finder: finder);
 }

@@ -16,7 +16,6 @@ dependencies:
   sembast_web:
   settings:
     path: '../../lib/settings'
-  shared_preferences:
 
 dev_dependencies:
   lints:

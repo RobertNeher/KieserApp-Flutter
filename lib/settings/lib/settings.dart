@@ -21,19 +21,22 @@ const List<Map<String, dynamic>> CUSTOMER_DATASET = [
 const List<Map<String, dynamic>> MACHINE_DATASET = [
   {
     "id": "A 3",
-    "title": "-",
+    "title": "Spreizung im Hüftgelenk",
     "parameters": ["Lehne", "Beine", "Loch"],
     "affectedBodyParts": "<Bild>",
-    "description": "Stärkung des kleinen Gesässmuskels",
-    "tutorialVideoURL": "http://kieser.de"
+    "description":
+        "Mit dieser Übung trainieren Sie dieselbe Muskelgruppe wie an der A3 Spreizung im Hüftgelenk, nämlich den kleinen und mittleren Gesäßmuskel.",
+    "tutorialVideoURL":
+        "https://www.facebook.com/KieserTrainingFrankfurtInnenstadt/videos/a3-spreizung-im-h%C3%BCftgelenk/1029688607470499/"
   },
   {
     "id": "B 1",
-    "title": "Beinstreckung",
+    "title": "Streckung im Kniegelenk",
     "parameters": ["Lehne", "Beine"],
     "affectedBodyParts": "<Bild>",
     "description": "Stärkung der Oberschenkelmuskeln",
-    "tutorialVideoURL": "http://kieser.de"
+    "tutorialVideoURL":
+        "https://www.facebook.com/KieserTrainingFrankfurtInnenstadt/videos/b1-streckung-im-kniegelenk/268653854475799/"
   },
   {
     "id": "B 6",

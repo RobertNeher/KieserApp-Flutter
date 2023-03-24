@@ -41,9 +41,11 @@ class _SettingsPageState extends State<SettingsPage> {
       'defaultDuration': int.parse(_tec_defaultDuration.text),
       'autoForward': _autoForward,
     };
+
     StoreRef prefDataStore = intMapStoreFactory.store("preferences");
-    var record = await prefDataStore.find(widget.database);
-    return await prefDataStore.update(widget.database, values);
+    List<RecordSnapshot> record = await prefDataStore.find(widget.database);
+    Finder finder = Finder(filter: Filter.byKey(record.first.key));
+    return await prefDataStore.update(widget.database, values, finder: finder);
   }
 
   @override
@@ -119,9 +121,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                   return CheckboxListTile(
                                     value: _autoForward,
                                     onChanged: (bool? value) {
-                                        setState(() {
-                                          _autoForward = value!;
-                                        });
+                                      setState(() {
+                                        _autoForward = value!;
+                                      });
                                     },
                                     title: const Text(
                                       'Automatisches Weiterspringen',
