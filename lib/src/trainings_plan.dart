@@ -115,6 +115,7 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: KieserAppBar(
         database: widget.database,

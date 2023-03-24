@@ -31,7 +31,7 @@ flutter:
   uses-material-design: true
 
   assets:
-  - assets/logo/kieser.png
+  - assets/images/
 
   fonts:
     - family: KieserApp

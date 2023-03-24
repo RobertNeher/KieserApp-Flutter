@@ -1,3 +1,5 @@
+import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/machine.dart';
 import 'package:kieser/src/get_parameters.dart';
@@ -37,6 +39,8 @@ class _TabContentState extends State<TabContent> {
 
   @override
   Widget build(BuildContext context) {
+    html.File imageFile = html.File(
+        'assets/images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png');
     return Container(
         width: 500,
         color: Colors.black,
@@ -72,12 +76,12 @@ class _TabContentState extends State<TabContent> {
                           width: 400,
                           height: 275,
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
                                 Container(
                                     padding: const EdgeInsets.all(7),
-                                    width: 175,
+                                    width: 200,
                                     child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -90,15 +94,19 @@ class _TabContentState extends State<TabContent> {
                                                 fontSize: 14,
                                                 color: Colors.white),
                                           ),
-                                          Text(
-                                              _machineDetail[
-                                                      'affectedBodyParts'] ??
+                                          imageFile.existsSync()
+                                              ? const Text(
                                                   'Hier kommt ein Bild der aktiven Körperpartien',
-                                              style: const TextStyle(
-                                                  fontFamily: "Railway",
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 14,
-                                                  color: Colors.white)),
+                                                  style: TextStyle(
+                                                      fontFamily: "Railway",
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 14,
+                                                      color: Colors.white))
+                                              : Image.asset(
+                                                  'images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png',
+                                                  height: 100,
+                                                ),
                                           const Divider(
                                             height: 20,
                                             color: Colors.blue,

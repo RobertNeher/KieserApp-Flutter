@@ -23,7 +23,7 @@ const List<Map<String, dynamic>> MACHINE_DATASET = [
     "id": "A 3",
     "title": "Spreizung im Hüftgelenk",
     "parameters": ["Lehne", "Beine", "Loch"],
-    "affectedBodyParts": "<Bild>",
+    "affectedBodyParts": "A 3.png",
     "description":
         "Mit dieser Übung trainieren Sie dieselbe Muskelgruppe wie an der A3 Spreizung im Hüftgelenk, nämlich den kleinen und mittleren Gesäßmuskel.",
     "tutorialVideoURL":
@@ -56,7 +56,7 @@ const List<Map<String, dynamic>> MACHINE_DATASET = [
   },
   {
     "id": "F 1.1",
-    "title": "-",
+    "title": "Rumpfdrehung",
     "parameters": ["Fuss", "Beine", "Kurbel", "Start", "Loch"],
     "affectedBodyParts": "<Bild>",
     "description": "-",
