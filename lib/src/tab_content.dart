@@ -1,5 +1,4 @@
-import 'dart:html' as html;
-
+// import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/machine.dart';
 import 'package:kieser/src/get_parameters.dart';
@@ -39,8 +38,8 @@ class _TabContentState extends State<TabContent> {
 
   @override
   Widget build(BuildContext context) {
-    html.File imageFile = html.File(
-        'assets/images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png');
+    // html.File imageFile = html.File(
+    //     'assets/images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png');
     return Container(
         width: 500,
         color: Colors.black,
@@ -94,19 +93,10 @@ class _TabContentState extends State<TabContent> {
                                                 fontSize: 14,
                                                 color: Colors.white),
                                           ),
-                                          imageFile.existsSync()
-                                              ? const Text(
-                                                  'Hier kommt ein Bild der aktiven Körperpartien',
-                                                  style: TextStyle(
-                                                      fontFamily: "Railway",
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      fontSize: 14,
-                                                      color: Colors.white))
-                                              : Image.asset(
-                                                  'images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png',
-                                                  height: 100,
-                                                ),
+                                          Image.network(
+                                            'assets/images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png',
+                                            height: 75,
+                                          ),
                                           const Divider(
                                             height: 20,
                                             color: Colors.blue,
@@ -120,14 +110,22 @@ class _TabContentState extends State<TabContent> {
                                                 fontSize: 14,
                                                 color: Colors.white),
                                           ),
-                                          Text(
-                                              _machineDetail['description'] ??
-                                                  "Das Gerät macht das und das",
-                                              style: const TextStyle(
-                                                  fontFamily: "Railway",
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 14,
-                                                  color: Colors.white)),
+                                          SizedBox(
+                                              height: 120,
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.vertical,
+                                                reverse: false,
+                                                child: Text(
+                                                    _machineDetail[
+                                                            'description'] ??
+                                                        "Das Gerät macht das und das",
+                                                    style: const TextStyle(
+                                                        fontFamily: "Railway",
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 14,
+                                                        color: Colors.white)),
+                                              ))
                                         ])),
                                 const VerticalDivider(
                                   thickness: 1,

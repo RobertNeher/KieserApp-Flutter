@@ -117,7 +117,7 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
                                 'Dauer',
                                 style: TextStyle(
                                     fontFamily: "Railway",
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.normal,
                                     fontSize: 18,
                                     color: Colors.white),
                               ),

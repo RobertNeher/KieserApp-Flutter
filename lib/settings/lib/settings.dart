@@ -23,9 +23,9 @@ const List<Map<String, dynamic>> MACHINE_DATASET = [
     "id": "A 3",
     "title": "Spreizung im Hüftgelenk",
     "parameters": ["Lehne", "Beine", "Loch"],
-    "affectedBodyParts": "A 3.png",
+    "affectedBodyParts": "<Bild>",
     "description":
-        "Mit dieser Übung trainieren Sie dieselbe Muskelgruppe wie an der A3 Spreizung im Hüftgelenk, nämlich den kleinen und mittleren Gesäßmuskel.",
+        "Die Maschine zur Spreizung im Hüftgelenk trainiert den kleinen und mittleren Gesäßmuskel. Bei der Übung drücken Sie die Oberschenkel so weit wie möglich zur Seite.",
     "tutorialVideoURL":
         "https://www.facebook.com/KieserTrainingFrankfurtInnenstadt/videos/a3-spreizung-im-h%C3%BCftgelenk/1029688607470499/"
   },
@@ -34,7 +34,8 @@ const List<Map<String, dynamic>> MACHINE_DATASET = [
     "title": "Streckung im Kniegelenk",
     "parameters": ["Lehne", "Beine"],
     "affectedBodyParts": "<Bild>",
-    "description": "Stärkung der Oberschenkelmuskeln",
+    "description":
+        "Bei der Streckung im Kniegelenk trainieren Sie den vierköpfigen Schenkelmuskel. In der Ausführung strecken Sie die Beine, bis sie vollständig gestreckt sind.",
     "tutorialVideoURL":
         "https://www.facebook.com/KieserTrainingFrankfurtInnenstadt/videos/b1-streckung-im-kniegelenk/268653854475799/"
   },
@@ -43,15 +44,17 @@ const List<Map<String, dynamic>> MACHINE_DATASET = [
     "title": "Beinpresse",
     "parameters": ["Sitz", "Lehne", "Schultern"],
     "affectedBodyParts": "<Bild>",
-    "description": "Stärkung der Oberschenkelmuskeln",
+    "description":
+        "Beim Beinpressen trainieren Sie den zwei- und vierköpfigen Schenkelmuskel sowie den Halb- und Plattsehnenmuskel und den großen Gesäßmuskel. Bei der Übung drücken Sie mit beiden Beinen das Fußbrett nach vorne.",
     "tutorialVideoURL": "http://kieser.de"
   },
   {
     "id": "B 7",
-    "title": "Beinbeugen",
+    "title": "Beugung im Kniegelenk sitzend",
     "parameters": ["Lehne", "Beine"],
     "affectedBodyParts": "<Bild>",
-    "description": "",
+    "description":
+        "Mit der Beugung im Kniegelenk sitzend trainieren Sie dieselben Muskeln wie bei der B5 in einer anderen Position. Der zweiköpfige Schenkelbeuger sowie die Halb- und Plattsehnenmuskeln werden trainiert. In sitzender Position beugen Sie die Beine im Kniegelenk, indem Sie versuchen, mit den Fersen so weit wie möglich Richtung Gesäß zu kommen.",
     "tutorialVideoURL": ""
   },
   {
@@ -59,71 +62,80 @@ const List<Map<String, dynamic>> MACHINE_DATASET = [
     "title": "Rumpfdrehung",
     "parameters": ["Fuss", "Beine", "Kurbel", "Start", "Loch"],
     "affectedBodyParts": "<Bild>",
-    "description": "-",
+    "description":
+        "Bei der Rumpfdrehung trainieren Sie den inneren und äußeren schrägen Bauchmuskel. Während der Übung drehen Sie den Oberkörper nach links und rechts.",
     "tutorialVideoURL": "http://kieser.de"
   },
   {
     "id": "F 2.1",
-    "title": "Bauchmuskel",
+    "title": "Rumpfbeugung",
     "parameters": ["Loch", "Fuss"],
     "affectedBodyParts": "<Bild>",
-    "description": "",
+    "description":
+        "Bei der Rumpfdrehung traininieren Sie den geraden Bauchmuskel. Während der Übung rollen Sie sich maximal ein.",
     "tutorialVideoURL": ""
   },
   {
     "id": "F 3.1",
-    "title": "Untere Rückenpartie",
+    "title": "Rückenstreckung",
     "parameters": ["Fuss", "Beine", "Hebel", "Start", "Loch"],
     "affectedBodyParts": "<Bild>",
-    "description": "",
+    "description":
+        "Bei der Rückenstreckung trainieren Sie die Rückenstrecker, also die Streckmuskeln der Wirbelsäule. Während der Übung richten Sie sich sitzend auf und strecken sich so weit wie möglich nach hinten.",
     "tutorialVideoURL": ""
   },
   {
     "id": "C 1",
-    "title": "-",
+    "title": "Überzug",
     "parameters": ["Sitz", "Lehne", "Arme"],
     "affectedBodyParts": "<Bild>",
-    "description": "",
+    "description":
+        "Beim Überzug trainieren Sie den großen Rückenmuskel. Bei der Übungsausführung drücken Sie mit den Oberarmen zunächst nach vorne, dann nach unten und schließlich so weit wie möglich nach hinten.",
     "tutorialVideoURL": ""
   },
   {
     "id": "C 3",
-    "title": "-",
+    "title": "Armzug",
     "parameters": ["Sitz", "Griffe", "Hebel"],
     "affectedBodyParts": "<Bild>",
-    "description": "",
+    "description":
+        "Beim seitlichen Armzug trainieren Sie dieselben Muskeln wie beim Armzug vorne. Der große Rückenmuskel, der zweiköpfige Armmuskel sowie der Trapezmuskel werden trainiert. In der Ausführung ziehen Sie die Griffe nach unten, bis Ihre Hände neben Ihren Schultern befinden.",
     "tutorialVideoURL": ""
   },
   {
     "id": "C 7",
-    "title": "-",
+    "title": "Ruderzug",
     "parameters": ["Sitz"],
     "affectedBodyParts": "<Bild>",
-    "description": "",
+    "description":
+        "Beim Ruderzug trainieren Sie den großen Rückenmuskel, den zweiköpfigen Armmuskel, den Trapezmuskel sowie den Rautenmuskel. In der Ausführung ziehen Sie die Griffe nach hinten und führen die Ellbogen nahe am Körper entlang.",
     "tutorialVideoURL": ""
   },
   {
     "id": "D 5",
-    "title": "-",
+    "title": "Armkreuzen",
     "parameters": ["Lehne", "Arme"],
     "affectedBodyParts": "<Bild>",
-    "description": "",
+    "description":
+        "Die Übung Armkreuzen trainiert den großen Brustmuskel. Bei der Ausführung sind die Oberarme parallel zum Boden, und Sie drücken die Hebelarme so weit nach vorne, bis sie sich berühren.",
     "tutorialVideoURL": ""
   },
   {
     "id": "D 6",
-    "title": "-",
+    "title": "Brustdrücken",
     "parameters": ["Sitz", "Lehne", "Griffe"],
     "affectedBodyParts": "<Bild>",
-    "description": "",
+    "description":
+        "Beim Brustdrücken trainieren Sie den großen Brustmuskel und den dreiköpfigen Armmuskel. Während der Übung drücken Sie die Hebelarme nach vorne, ohne dass die Arme vollständig gestreckt werden.",
     "tutorialVideoURL": ""
   },
   {
     "id": "H 1",
-    "title": "Bizeps",
+    "title": "Armbeugung",
     "parameters": ["Sitz"],
     "affectedBodyParts": "<Bild>",
-    "description": "",
+    "description":
+        "Bei der Armbeugung trainieren Sie den zweiköpfigen Armmuskel. Während der Übung befinden sich die Ellbogen zwischen den Polstern und Sie beugen die Arme so weit wie möglich.",
     "tutorialVideoURL": ""
   }
 ];

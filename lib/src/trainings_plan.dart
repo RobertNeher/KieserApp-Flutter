@@ -76,14 +76,28 @@ class TrainingsPlanState extends State<TrainingsPlan>
   }
 
   void _saveResults() {
-    saveResults(widget.database, widget.customerID, DateTime.now(), context);
+    if (_tabController.index == _stations.length - 1) {
+      saveResults(widget.database, widget.customerID, DateTime.now(), context);
+    }
   }
 
+  /**
+   * Buggy behavior from Flutter SDK (beta channel 3.9.0-0.2.pre) : Setstate jumps always
+   * back to first tab. Workaround is in place
+   * Setstate is required to show Floating Action Button, only when last training stataaion has been reached.
+   */
+
   void _handleTabSelection() {
-    _showFAB = false;
-    if (_tabController.index == _stations.length - 1) {
-      _showFAB = true;
-      setState(() {});
+    if (_tabController.indexIsChanging) {
+      _showFAB = (_tabController.index == _stations.length - 1);
+
+      print('${_tabController.index}:$_showFAB'); // TODO: Remove print
+
+      // if (_tabController.index == _stations.length - 1) {
+      //   setState(() {
+      //     _tabController.animateTo(_stations.length - 1);
+      //   });
+      // }
     }
   }
 
@@ -97,7 +111,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   @override
   void initState() {
-    _title = 'Trainings-Plan für\n!customerName! (${widget.customerID})';
     _fab = Visibility(
         child: FloatingActionButton(
       backgroundColor: Colors.blue,
@@ -105,6 +118,11 @@ class TrainingsPlanState extends State<TrainingsPlan>
       child: const Icon(Icons.save),
     ));
     super.initState();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
   }
 
   @override
@@ -116,58 +134,60 @@ class TrainingsPlanState extends State<TrainingsPlan>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-      appBar: KieserAppBar(
-        database: widget.database,
-        customerID: widget.customerID,
-        title: _title,
-      ),
-      floatingActionButton: _showFAB ? _fab : Container(),
-      body: FutureBuilder<void>(
-          future: Future.wait([_getPreferences(), _getStations()]),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                  child: CircularProgressIndicator(color: Colors.blue));
-            }
-            if (snapshot.connectionState == ConnectionState.done) {
-              _tabController = TabController(
-                  length: _stations.length, initialIndex: 0, vsync: this);
-              _tabController.addListener(_handleTabSelection);
-              return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TabBar(
-                      labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      tabs: _getTabBar(),
-                      padding: const EdgeInsets.all(0),
-                      isScrollable: true,
-                      dividerColor: Colors.amber,
-                      indicatorColor: Colors.black,
-                      labelColor: Colors.white,
-                      unselectedLabelStyle: const TextStyle(
-                          fontFamily: "Railway",
-                          fontWeight: FontWeight.normal,
-                          fontSize: 24,
-                          color: Colors.grey),
-                      labelStyle: const TextStyle(
-                          backgroundColor: Colors.black,
-                          fontFamily: "Railway",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          color: Colors.white),
-                      unselectedLabelColor: Colors.grey,
-                      controller: _tabController,
-                    ),
-                    Expanded(
-                        child: _getTabContent(_tabController, _moveForward))
-                  ]);
-            } else {
-              return const Center(child: Text('Something went wrong!'));
-            }
-          }),
-    );
+    return FutureBuilder<void>(
+        future: Future.wait([_getPreferences(), _getStations()]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.blue));
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            _title =
+                'Trainings-Plan für\n!customerName! (${widget.customerID})';
+            _tabController = TabController(
+                length: _stations.length, initialIndex: 0, vsync: this);
+            _tabController.addListener(_handleTabSelection);
+            return Scaffold(
+                appBar: KieserAppBar(
+                  database: widget.database,
+                  customerID: widget.customerID,
+                  title: _title,
+                ),
+                floatingActionButton:
+                    _fab, // _showFAB ? _fab : Container(), TODO: Remove workaround
+                body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TabBar(
+                        labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        tabs: _getTabBar(),
+                        padding: const EdgeInsets.all(0),
+                        isScrollable: true,
+                        dividerColor: Colors.amber,
+                        indicatorColor: Colors.black,
+                        labelColor: Colors.white,
+                        unselectedLabelStyle: const TextStyle(
+                            fontFamily: "Railway",
+                            fontWeight: FontWeight.normal,
+                            fontSize: 24,
+                            color: Colors.grey),
+                        labelStyle: const TextStyle(
+                            backgroundColor: Colors.black,
+                            fontFamily: "Railway",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                            color: Colors.white),
+                        unselectedLabelColor: Colors.grey,
+                        controller: _tabController,
+                      ),
+                      Expanded(
+                          child: _getTabContent(_tabController, _moveForward))
+                    ]));
+          } else {
+            return const Center(child: Text('Something went wrong!'));
+          }
+        });
   }
 
   @override
