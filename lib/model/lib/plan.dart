@@ -1,5 +1,7 @@
 import 'package:sembast/sembast.dart';
 import 'package:model/machine.dart';
+import 'package:sembast/sembast_io.dart';
+import 'package:settings/settings.dart';
 
 class Plan {
   int _customerID = 0;
@@ -78,4 +80,11 @@ class Plan {
   String toString() {
     return ('Instance of "Plan" for customer $_customerID:\n$_plans\n------');
   }
+}
+
+void main(List<String> args) async {
+  Database database = await databaseFactoryIo.openDatabase(DB_FILE);
+
+  Plan p = Plan(database, 19711);
+  print(await p.getLatest());
 }

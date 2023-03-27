@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kieser/model/lib/result.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/handle_results.dart';
 import 'package:sembast/sembast.dart';
@@ -19,7 +20,7 @@ class ResultsPage extends StatefulWidget {
   State<ResultsPage> createState() => _ResultsPageState();
 }
 
-Widget getResultTable(Map<String, dynamic> trainingResult) {
+Widget _getResultTable(Map<String, dynamic> trainingResult) {
   for (Map<String, dynamic> result in trainingResult['results']) {
     TableRow tableRow = TableRow();
   }
@@ -47,9 +48,18 @@ class _ResultsPageState extends State<ResultsPage> {
   List<Tab> _trainingTabs = [];
   List<Widget> _resultTables = [];
 
+  Future<List<Map<String, dynamic>>> getTrainingResults(
+      Database database, int customerID) async {
+    Result results = Result(database, customerID);
+
+    _results = await results.getAll();
+
+    return _results;
+  }
+
   @override
   void initState() {
-    getTrainingResults(widget.customerID).then((value) => _results);
+    getTrainingResults(widget.database, widget.customerID);
 
     for (Map<String, dynamic> training in _results) {
       String tabTitle = _dfTab.format(DateTime.parse(training['trainingDate']));
@@ -61,8 +71,9 @@ class _ResultsPageState extends State<ResultsPage> {
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ))));
-      _resultTables.add(getResultTable(training));
+      _resultTables.add(_getResultTable(training));
     }
+    print(_resultTables.length);
     super.initState();
   }
 
@@ -73,27 +84,29 @@ class _ResultsPageState extends State<ResultsPage> {
         child: Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(40),
-              child: KieserAppBar(database: widget.database, customerID: widget.customerID, title: widget.title),
+              child: KieserAppBar(
+                  database: widget.database,
+                  customerID: widget.customerID,
+                  title: widget.title),
             ),
-            body: Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      TabBar(
-                        tabs: _trainingTabs,
-                      ),
-                      const SizedBox(height: 10),
-                      TabBarView(children: _resultTables),
-                      const SizedBox(height: 20),
-                      Divider(height: 1, thickness: 10, color: Colors.blue),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                          child: const Text('OK'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
-                    ]))));
+            body: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  TabBar(
+                    tabs: _trainingTabs,
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                      height: 200, child: TabBarView(children: _resultTables)),
+                  const SizedBox(height: 20),
+                  // Divider(height: 1, thickness: 10, color: Colors.blue),
+                  // const SizedBox(height: 20),
+                  ElevatedButton(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                ])));
   }
 }

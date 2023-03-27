@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/src/settings_page.dart';
 import 'package:kieser/src/results_page.dart';
 import 'package:kieser/src/handle_results.dart';
 import 'package:sembast/sembast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Widget KieserDrawer(BuildContext context, Database database) {
+  Map<String, dynamic> preferences = {};
   int customerID = 0;
-  void _getPref() async {
-    final SharedPreferences _prefs = await SharedPreferences.getInstance();
-    final SharedPreferences prefs = await _prefs;
 
-    if (prefs.containsKey('CUSTOMER_ID')) {
-      customerID = prefs.getInt('CUSTOMER_ID')!;
-    }
+  Future<Map<String, dynamic>> getPreferences() async {
+    Preferences p = Preferences(database);
+    preferences = await p.loadPrefs();
+
+    return preferences;
   }
 
-  _getPref();
+  getPreferences();
 
   return Drawer(
       backgroundColor: Colors.lightBlue[50],
@@ -43,7 +43,9 @@ Widget KieserDrawer(BuildContext context, Database database) {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ResultsPage(
-                      database: database, customerID: customerID, title: "Letzte Ergebnisse"),
+                      database: database,
+                      customerID: preferences['customerID'],
+                      title: "Letzte Ergebnisse"),
                 ));
           },
         ),
@@ -51,20 +53,21 @@ Widget KieserDrawer(BuildContext context, Database database) {
           leading: const Icon(Icons.remove),
           title: const Text('Löschen aller Daten'),
           onTap: () {
-            ConfirmDeletionDialog(context, customerID);
+            ConfirmDeletionDialog(context, database, customerID);
           },
         ),
       ]));
 }
 
-void ConfirmDeletionDialog(BuildContext context, int customerID) {
+void ConfirmDeletionDialog(
+    BuildContext context, Database database, int customerID) {
   Widget okButton = TextButton(
     child: const Text("Ja"),
     onPressed: () {
       const SnackBar snackBar =
           SnackBar(content: Text('Alle Daten sind gelöscht!'));
 
-      removeCustomerResults(customerID);
+      removeCustomerResults(database, customerID);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Navigator.of(context).pop();
     },

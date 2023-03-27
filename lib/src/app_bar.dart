@@ -52,7 +52,7 @@ class _KieserAppBarState extends State<KieserAppBar> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/logo/kieser.png',
+                      'assets/images/kieser.png',
                       height: 70,
                       width: 90,
                     ),

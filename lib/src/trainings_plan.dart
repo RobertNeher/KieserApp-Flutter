@@ -3,12 +3,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/handle_results.dart';
 import 'package:kieser/src/tab_content.dart';
 import 'package:model/plan.dart';
 import 'package:sembast/sembast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TrainingsPlan extends StatefulWidget {
   const TrainingsPlan({
@@ -27,9 +27,8 @@ class TrainingsPlanState extends State<TrainingsPlan>
     with
         TickerProviderStateMixin,
         AutomaticKeepAliveClientMixin<TrainingsPlan> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  static late Visibility _fab;
-  static bool _autoForward = false;
+  late Visibility _fab;
+  Map<String, dynamic> preferences = {};
   List<Map<String, dynamic>> _stations = [];
   late TabController _tabController;
   List<Widget> tabContents = <Widget>[];
@@ -55,17 +54,15 @@ class TrainingsPlanState extends State<TrainingsPlan>
     _stations = await plan.getStations();
   }
 
-  Future<void> _getAutoForward() async {
-    SharedPreferences prefs = await _prefs;
+  Future<Map<String, dynamic>> _getPreferences() async {
+    Preferences p = Preferences(widget.database);
+    preferences = await p.loadPrefs();
 
-    _autoForward = (prefs.containsKey('AUTOFORWARD'))
-        ? prefs.getBool('AUTOFORWARD')!
-        : false;
+    return preferences;
   }
 
   Widget _getTabContent(
       TabController tabController, void Function() moveForward) {
-    // _getStations();
     tabContents = [];
 
     for (Map<String, dynamic> station in _stations) {
@@ -79,29 +76,41 @@ class TrainingsPlanState extends State<TrainingsPlan>
   }
 
   void _saveResults() {
-    saveResults(widget.customerID, DateTime.now(), context);
+    if (_tabController.index == _stations.length - 1) {
+      saveResults(widget.database, widget.customerID, DateTime.now(), context);
+    }
   }
+
+  /**
+   * Buggy behavior from Flutter SDK (beta channel 3.9.0-0.2.pre) : Setstate jumps always
+   * back to first tab. Workaround is in place
+   * Setstate is required to show Floating Action Button, only when last training stataaion has been reached.
+   */
 
   void _handleTabSelection() {
-    setState(() {
-      if (_tabController.indexIsChanging) {
-        _showFAB = (_tabController.index == _stations.length - 1);
-      }
-    });
+    if (_tabController.indexIsChanging) {
+      _showFAB = (_tabController.index == _stations.length - 1);
+
+      print('${_tabController.index}:$_showFAB'); // TODO: Remove print
+
+      // if (_tabController.index == _stations.length - 1) {
+      //   setState(() {
+      //     _tabController.animateTo(_stations.length - 1);
+      //   });
+      // }
+    }
   }
 
-  _moveForward() {
-    if (_autoForward && (_tabController.index < _stations.length - 1)) {
-      _tabController.index += 1;
+  void _moveForward() {
+    if (preferences['autoForward'] &&
+        (_tabController.index < _stations.length - 1)) {
+      _tabController.animateTo(_tabController.index + 1);
     }
     return;
   }
 
   @override
   void initState() {
-    _getStations();
-        _title =
-            'Trainings-Plan für\n!customerName! (${widget.customerID})';
     _fab = Visibility(
         child: FloatingActionButton(
       backgroundColor: Colors.blue,
@@ -112,6 +121,11 @@ class TrainingsPlanState extends State<TrainingsPlan>
   }
 
   @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+  }
+
+  @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
@@ -119,55 +133,61 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: KieserAppBar(database: widget.database, customerID: widget.customerID, title: _title,),
-      body: FutureBuilder<void>(
-          future: Future.wait(
-              [_getAutoForward(), _getStations()]),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                  child: CircularProgressIndicator(color: Colors.blue));
-            }
-            if (snapshot.connectionState == ConnectionState.done) {
-              _tabController = TabController(
-                  length: _stations.length, initialIndex: 0, vsync: this);
-              _tabController.addListener(_handleTabSelection);
-              return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TabBar(
-                      labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      tabs: _getTabBar(),
-                      padding: const EdgeInsets.all(0),
-                      isScrollable: true,
-                      dividerColor: Colors.amber,
-                      indicatorColor: Colors.black,
-                      labelColor: Colors.white,
-                      unselectedLabelStyle: const TextStyle(
-                          fontFamily: "Railway",
-                          fontWeight: FontWeight.normal,
-                          fontSize: 24,
-                          color: Colors.grey),
-                      labelStyle: const TextStyle(
-                          backgroundColor: Colors.black,
-                          fontFamily: "Railway",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          color: Colors.white),
-                      unselectedLabelColor: Colors.grey,
-                      controller: _tabController,
-                    ),
-                    Expanded(
-                        child: _getTabContent(_tabController, _moveForward))
-                  ]);
-            } else {
-              return const Center(child: Text('Something went wrong!'));
-            }
-          }),
-      floatingActionButton: _showFAB ? _fab : null,
-    );
+    super.build(context);
+    return FutureBuilder<void>(
+        future: Future.wait([_getPreferences(), _getStations()]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.blue));
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            _title =
+                'Trainings-Plan für\n!customerName! (${widget.customerID})';
+            _tabController = TabController(
+                length: _stations.length, initialIndex: 0, vsync: this);
+            _tabController.addListener(_handleTabSelection);
+            return Scaffold(
+                appBar: KieserAppBar(
+                  database: widget.database,
+                  customerID: widget.customerID,
+                  title: _title,
+                ),
+                floatingActionButton:
+                    _fab, // _showFAB ? _fab : Container(), TODO: Remove workaround
+                body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TabBar(
+                        labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        tabs: _getTabBar(),
+                        padding: const EdgeInsets.all(0),
+                        isScrollable: true,
+                        dividerColor: Colors.amber,
+                        indicatorColor: Colors.black,
+                        labelColor: Colors.white,
+                        unselectedLabelStyle: const TextStyle(
+                            fontFamily: "Railway",
+                            fontWeight: FontWeight.normal,
+                            fontSize: 24,
+                            color: Colors.grey),
+                        labelStyle: const TextStyle(
+                            backgroundColor: Colors.black,
+                            fontFamily: "Railway",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                            color: Colors.white),
+                        unselectedLabelColor: Colors.grey,
+                        controller: _tabController,
+                      ),
+                      Expanded(
+                          child: _getTabContent(_tabController, _moveForward))
+                    ]));
+          } else {
+            return const Center(child: Text('Something went wrong!'));
+          }
+        });
   }
 
   @override
