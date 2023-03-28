@@ -38,8 +38,6 @@ class _TabContentState extends State<TabContent> {
 
   @override
   Widget build(BuildContext context) {
-    // html.File imageFile = html.File(
-    //     'assets/images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png');
     return Container(
         width: 500,
         color: Colors.black,
@@ -95,7 +93,7 @@ class _TabContentState extends State<TabContent> {
                                           ),
                                           Image.network(
                                             'assets/images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png',
-                                            height: 75,
+                                            height: 100,
                                           ),
                                           const Divider(
                                             height: 20,

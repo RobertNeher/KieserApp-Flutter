@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kieser/model/lib/preferences.dart';
@@ -14,6 +12,7 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
   TextEditingController _tecDuration = TextEditingController();
   TextEditingController _tecWeightDone = TextEditingController();
   TextEditingController _tecWeightPlanned = TextEditingController();
+  StoreRef tempResult = intMapStoreFactory.store('temp');
 
   Future<void> getResults(int customerID) async {
     Result r = Result(database, customerID);
@@ -54,19 +53,19 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
     }
   }
 
-  // saveResults() async {
-  //   Map<String, dynamic> result = {
-  //     if (_tecDuration.text.isNotEmpty)
-  //       'duration':
-  //           _tecDuration.text.isNotEmpty ? int.parse(_tecDuration.text) : 0,
-  //     'weightDone':
-  //         _tecWeightDone.text.isNotEmpty ? int.parse(_tecWeightDone.text) : 0,
-  //     'weightPlanned': _tecWeightPlanned.text.isNotEmpty
-  //         ? int.parse(_tecWeightPlanned.text)
-  //         : 0
-  //   };
-  //   prefs.setString(machine['id'], json.encode(result));
-  // }
+  saveResults() async {
+    Map<String, dynamic> result = {
+      'machineID': machine['id'],
+      'duration':
+          _tecDuration.text.isNotEmpty ? int.parse(_tecDuration.text) : 0,
+      'weightDone':
+          _tecWeightDone.text.isNotEmpty ? int.parse(_tecWeightDone.text) : 0,
+      'weightPlanned': _tecWeightPlanned.text.isNotEmpty
+          ? int.parse(_tecWeightPlanned.text)
+          : 0
+    };
+    await tempResult.add(database, result);
+  }
 
   const IconData dumbBellIcon =
       IconData(0xe800, fontFamily: 'KieserApp', fontPackage: null);
@@ -87,7 +86,7 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
           return Form(
               key: formKey,
               onChanged: () {
-                // saveResults();
+                saveResults();
               },
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

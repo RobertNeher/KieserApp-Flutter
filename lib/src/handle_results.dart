@@ -17,15 +17,25 @@ Future<List<Map<String, dynamic>>> getTrainingResults(
 void saveResults(Database database, int customerID, DateTime dateTime,
     BuildContext context) async {
   final DateFormat df = DateFormat('yyyy-MM-dd');
-  final List<Map<String, dynamic>> results =
-      await getTrainingResults(database, customerID);
+  // final List<Map<String, dynamic>> results =
+  //     await getTrainingResults(database, customerID);
 
   final StoreRef resultsStore = intMapStoreFactory.store("results");
-  Map<String, dynamic> resultJson = {'customerID': customerID, 'trainings': []};
+  final StoreRef tempResult = intMapStoreFactory.store('temp');
+  Map<String, dynamic> temp = {};
+  List<Map<String, dynamic>> results = [];
 
-  resultJson['trainings']
-      .add({'trainingDate': df.format(DateTime.now()), 'results': results});
-  await resultsStore.add(database, resultJson);
+  List<RecordSnapshot> tempResults = await tempResult.find(database);
+
+  for (RecordSnapshot stationResult in tempResults) {
+    temp = stationResult.value as Map<String, dynamic>;
+    results.add(temp);
+  }
+  await resultsStore.add(database, {
+    'customerID': customerID,
+    'trainingDate': df.format(DateTime.now()),
+    'results': results
+  });
 
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(

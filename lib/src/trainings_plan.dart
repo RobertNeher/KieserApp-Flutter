@@ -1,5 +1,3 @@
-// import 'dart:convert';
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -86,7 +84,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
    * back to first tab. Workaround is in place
    * Setstate is required to show Floating Action Button, only when last training stataaion has been reached.
    */
-
   void _handleTabSelection() {
     if (_tabController.indexIsChanging) {
       _showFAB = (_tabController.index == _stations.length - 1);
