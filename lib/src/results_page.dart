@@ -25,70 +25,35 @@ Widget _getResultTable(Map<String, dynamic> trainingResult) {
 
   for (Map<String, dynamic> result in trainingResult['results']) {
     rowData.add(DataRow(cells: [
-      DataCell(Text(result['machineID'],
-          style: const TextStyle(
-              fontFamily: "Railway",
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-              color: Colors.blue))),
-      DataCell(Text(result['duration'].toString(),
-          style: const TextStyle(
-              fontFamily: "Railway",
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-              color: Colors.blue))),
-      DataCell(Text(result['weightDone'].toString(),
-          style: const TextStyle(
-              fontFamily: "Railway",
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-              color: Colors.blue))),
-      DataCell(Text(result['weightPlanned'].toString(),
-          style: const TextStyle(
-              fontFamily: "Railway",
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-              color: Colors.blue))),
+      DataCell(Text(result['machineID'])),
+      DataCell(Text(result['duration'].toString())),
+      DataCell(Text(result['weightDone'].toString())),
+      DataCell(Text(result['weightPlanned'].toString())),
     ]));
   }
-  return Expanded(
-      // color: Colors.lightBlueAccent,
-      // width: 300,
-      // height: 400,
-      child: DataTable(
+  return DataTable(
     columns: const <DataColumn>[
-      DataColumn(
-        label: Expanded(child: Text('Gerät')),
-      ),
-      DataColumn(label: Expanded(child: Text('Trainings-\ndauer'))),
-      DataColumn(
-          label: Expanded(
-              child: Text('Gewicht\n(akt.Training)',
-                  style: TextStyle(
-                      fontFamily: "Railway",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.blue)))),
-      DataColumn(
-          label: Expanded(
-              child: Text('Gewicht\n(geplant)',
-                  style: TextStyle(
-                      fontFamily: "Railway",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.blue)))),
+      DataColumn(label: Text('Gerät')),
+      DataColumn(label: Text('Trainings-\ndauer')),
+      DataColumn(label: Text('Gewicht\n(akt.Training)')),
+      DataColumn(label: Text('Gewicht\n(geplant)'))
     ],
     rows: rowData,
+    dataTextStyle: const TextStyle(
+        fontFamily: "Railway",
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+        color: Colors.black),
     headingTextStyle: const TextStyle(
         fontFamily: "Railway",
         fontWeight: FontWeight.bold,
         fontSize: 16,
-        color: Colors.blue),
+        color: Colors.black),
     border: TableBorder.all(
       color: Colors.grey,
       width: 0.75,
     ),
-  ));
+  );
 }
 
 class _ResultsPageState extends State<ResultsPage> {
@@ -156,15 +121,14 @@ class _ResultsPageState extends State<ResultsPage> {
                             tabs: _trainingTabs,
                           ),
                           const SizedBox(height: 10),
-                          SizedBox(
-                              height: 100,
-                              child: TabBarView(children: _resultTables)),
-                          const SizedBox(height: 20),
+                          Expanded(child: TabBarView(children: _resultTables)),
+                          // const SizedBox(height: 20),
                           ElevatedButton(
                               child: const Text('OK'),
                               onPressed: () {
                                 Navigator.pop(context);
                               }),
+                          const SizedBox(height: 20),
                         ])));
           } else {
             return const Center(
