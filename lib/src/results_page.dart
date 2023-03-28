@@ -21,29 +21,43 @@ class ResultsPage extends StatefulWidget {
 }
 
 Widget _getResultTable(Map<String, dynamic> trainingResult) {
+  List<DataRow> rowData = <DataRow>[];
+
   for (Map<String, dynamic> result in trainingResult['results']) {
-    TableRow tableRow = TableRow();
+    rowData.add(DataRow(cells: [
+      DataCell(Text(result['machineID'])),
+      DataCell(Text(result['duration'].toString())),
+      DataCell(Text(result['weightDone'].toString())),
+      DataCell(Text(result['weightPlanned'].toString())),
+    ]));
   }
-  return Container(
-      color: Colors.lightBlueAccent,
-      width: 300,
-      height: 400,
-      child: Table(
-          columnWidths: const <int, TableColumnWidth>{
-            0: FixedColumnWidth(60),
-            1: FixedColumnWidth(60),
-            2: FixedColumnWidth(60),
-            3: FixedColumnWidth(60)
-          },
-          border: TableBorder.all(
-            color: Colors.blue,
-            width: 1,
-          )));
+  return DataTable(
+    columns: const <DataColumn>[
+      DataColumn(label: Text('Gerät')),
+      DataColumn(label: Text('Trainings-\ndauer')),
+      DataColumn(label: Text('Gewicht\n(akt.Training)')),
+      DataColumn(label: Text('Gewicht\n(geplant)'))
+    ],
+    rows: rowData,
+    dataTextStyle: const TextStyle(
+        fontFamily: "Railway",
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+        color: Colors.black),
+    headingTextStyle: const TextStyle(
+        fontFamily: "Railway",
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+        color: Colors.black),
+    border: TableBorder.all(
+      color: Colors.grey,
+      width: 0.75,
+    ),
+  );
 }
 
 class _ResultsPageState extends State<ResultsPage> {
   final DateFormat _dfTab = DateFormat('dd. MMMM yyyy');
-  late final TabController _tabController;
   List<Map<String, dynamic>> _results = [];
   List<Tab> _trainingTabs = [];
   List<Widget> _resultTables = [];
@@ -59,54 +73,72 @@ class _ResultsPageState extends State<ResultsPage> {
 
   @override
   void initState() {
-    getTrainingResults(widget.database, widget.customerID);
-
-    for (Map<String, dynamic> training in _results) {
-      String tabTitle = _dfTab.format(DateTime.parse(training['trainingDate']));
-      _trainingTabs.add(Tab(
-          child: Text(tabTitle,
-              style: const TextStyle(
-                fontFamily: "Railway",
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ))));
-      _resultTables.add(_getResultTable(training));
-    }
-    print(_resultTables.length);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: _results.length,
-        child: Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(40),
-              child: KieserAppBar(
-                  database: widget.database,
-                  customerID: widget.customerID,
-                  title: widget.title),
-            ),
-            body: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  TabBar(
-                    tabs: _trainingTabs,
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                      height: 200, child: TabBarView(children: _resultTables)),
-                  const SizedBox(height: 20),
-                  // Divider(height: 1, thickness: 10, color: Colors.blue),
-                  // const SizedBox(height: 20),
-                  ElevatedButton(
-                      child: const Text('OK'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ])));
+    return FutureBuilder<List<Map<String, dynamic>>>(
+        future: getTrainingResults(widget.database, widget.customerID),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: CircularProgressIndicator(
+                    backgroundColor: Colors.blue, strokeWidth: 5));
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            _resultTables = [];
+
+            for (Map<String, dynamic> training in _results) {
+              String tabTitle =
+                  _dfTab.format(DateTime.parse(training['trainingDate']));
+              _trainingTabs.add(Tab(
+                  child: Text(tabTitle,
+                      style: const TextStyle(
+                        fontFamily: "Railway",
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ))));
+              _resultTables.add(_getResultTable(training));
+            }
+
+            return DefaultTabController(
+                length: _results.length,
+                child: Scaffold(
+                    appBar: PreferredSize(
+                      preferredSize: const Size.fromHeight(40),
+                      child: KieserAppBar(
+                          database: widget.database,
+                          customerID: widget.customerID,
+                          title: widget.title),
+                    ),
+                    body: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          TabBar(
+                            tabs: _trainingTabs,
+                          ),
+                          const SizedBox(height: 10),
+                          Expanded(child: TabBarView(children: _resultTables)),
+                          // const SizedBox(height: 20),
+                          ElevatedButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }),
+                          const SizedBox(height: 20),
+                        ])));
+          } else {
+            return const Center(
+                child: Text('Something went wrong!',
+                    style: TextStyle(
+                        // fontFamily: 'Railway',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.red)));
+          }
+        });
   }
 }
