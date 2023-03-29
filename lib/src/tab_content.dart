@@ -1,6 +1,7 @@
 // import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/machine.dart';
+import 'package:kieser/settings/lib/settings.dart';
 import 'package:kieser/src/get_parameters.dart';
 import 'package:kieser/src/training_result.dart';
 import 'package:sembast/sembast.dart';
@@ -109,7 +110,7 @@ class _TabContentState extends State<TabContent> {
                                                 color: Colors.white),
                                           ),
                                           SizedBox(
-                                              height: 120,
+                                              height: 100,
                                               child: SingleChildScrollView(
                                                 scrollDirection: Axis.vertical,
                                                 reverse: false,

@@ -17,8 +17,6 @@ void main() async {
   //   WindowManager.instance.setMaximumSize(const Size(1200, 600));
   // }
   final Database database;
-  // final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  // SharedPreferences prefs = await _prefs;
 
   if (kIsWeb) {
     database = await databaseFactoryWeb.openDatabase(DB_FILE);
