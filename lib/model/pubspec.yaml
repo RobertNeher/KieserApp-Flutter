@@ -20,9 +20,3 @@ dependencies:
 dev_dependencies:
   lints:
   test:
-
-flutter:
-  assets:
-    - '../../assets/datasets/customers.json'
-    - '../../assets/datasets/plans.json'
-    - '../../assets/datasets/machines.json'
