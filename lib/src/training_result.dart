@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/model/lib/result.dart';
+import 'package:kieser/settings/lib/settings.dart';
 import 'package:sembast/sembast.dart';
 
 Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
@@ -14,6 +13,7 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
   TextEditingController _tecDuration = TextEditingController();
   TextEditingController _tecWeightDone = TextEditingController();
   TextEditingController _tecWeightPlanned = TextEditingController();
+  StoreRef tempResult = intMapStoreFactory.store(TEMP_STORE);
 
   Future<void> getResults(int customerID) async {
     Result r = Result(database, customerID);
@@ -41,11 +41,12 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
     int defaultDuration = preferences['defaultDuration'];
     Map<String, dynamic> defaults = await getStationResult(machine['id']);
     if (_tecDuration.text.isEmpty) {
-      _tecDuration.text =
-          (defaults['duration'] == null || defaults['duration'] == 0)
-              ? defaultDuration.toString()
-              : defaults['duration'].toString();
+      _tecDuration.text = '0';
+      //       (defaults['duration'] == null || defaults['duration'] == 0)
+      //           ? defaultDuration.toString()
+      //           : defaults['duration'].toString();
     }
+
     if (_tecWeightDone.text.isEmpty) {
       _tecWeightDone.text = defaults['weightDone'].toString();
     }
@@ -54,26 +55,34 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
     }
   }
 
-  // saveResults() async {
-  //   Map<String, dynamic> result = {
-  //     if (_tecDuration.text.isNotEmpty)
-  //       'duration':
-  //           _tecDuration.text.isNotEmpty ? int.parse(_tecDuration.text) : 0,
-  //     'weightDone':
-  //         _tecWeightDone.text.isNotEmpty ? int.parse(_tecWeightDone.text) : 0,
-  //     'weightPlanned': _tecWeightPlanned.text.isNotEmpty
-  //         ? int.parse(_tecWeightPlanned.text)
-  //         : 0
-  //   };
-  //   prefs.setString(machine['id'], json.encode(result));
-  // }
+  Future<void> saveResults() async {
+    Map<String, dynamic> result = {
+      'machineID': machine['id'],
+      'duration':
+          _tecDuration.text.isNotEmpty ? int.parse(_tecDuration.text) : 0,
+      'weightDone':
+          _tecWeightDone.text.isNotEmpty ? int.parse(_tecWeightDone.text) : 0,
+      'weightPlanned': _tecWeightPlanned.text.isNotEmpty
+          ? int.parse(_tecWeightPlanned.text)
+          : 0
+    };
+    // print('Saving data for machine ${machine["id"]}:${result}');
+
+    Finder finder = Finder(filter: Filter.equals('machineID', machine['id']));
+    List<RecordSnapshot> record =
+        await tempResult.find(database, finder: finder);
+    print(record.length);
+    if (record.length == 0) {
+      await tempResult.add(database, result);
+    } else if (record.length == 2) {
+      await tempResult.record(record[0].key).put(database, result);
+    }
+  }
 
   const IconData dumbBellIcon =
       IconData(0xe800, fontFamily: 'KieserApp', fontPackage: null);
   const IconData dumbBellNextIcon =
       IconData(0xe801, fontFamily: 'KieserApp', fontPackage: null);
-
-  getDefaults();
 
   return FutureBuilder<void>(
       future: Future.wait([getDefaults(), getResults(customerID)]),
@@ -87,7 +96,7 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
           return Form(
               key: formKey,
               onChanged: () {
-                // saveResults();
+                saveResults();
               },
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

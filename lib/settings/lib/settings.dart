@@ -12,6 +12,7 @@ Die KieserApp führt dich durch dein Training:
 
 Viel Spass beim Training!
 """;
+const String TEMP_STORE = 'temp';
 const List<Map<String, dynamic>> CUSTOMER_DATASET = [
   {"customerID": 19703, "name": "Lieschen Müller"},
   {"customerID": 19711, "name": "Robert Neher"},

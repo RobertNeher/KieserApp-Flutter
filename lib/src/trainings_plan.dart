@@ -1,5 +1,3 @@
-// import 'dart:convert';
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -24,9 +22,7 @@ class TrainingsPlan extends StatefulWidget {
 }
 
 class TrainingsPlanState extends State<TrainingsPlan>
-    with
-        TickerProviderStateMixin,
-        AutomaticKeepAliveClientMixin<TrainingsPlan> {
+    with TickerProviderStateMixin {
   late Visibility _fab;
   Map<String, dynamic> preferences = {};
   List<Map<String, dynamic>> _stations = [];
@@ -84,14 +80,11 @@ class TrainingsPlanState extends State<TrainingsPlan>
   /**
    * Buggy behavior from Flutter SDK (beta channel 3.9.0-0.2.pre) : Setstate jumps always
    * back to first tab. Workaround is in place
-   * Setstate is required to show Floating Action Button, only when last training stataaion has been reached.
+   * Setstate is required to show Floating Action Button, only when last training station has been reached.
    */
-
   void _handleTabSelection() {
     if (_tabController.indexIsChanging) {
       _showFAB = (_tabController.index == _stations.length - 1);
-
-      print('${_tabController.index}:$_showFAB'); // TODO: Remove print
 
       // if (_tabController.index == _stations.length - 1) {
       //   setState(() {
@@ -133,7 +126,7 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     return FutureBuilder<void>(
         future: Future.wait([_getPreferences(), _getStations()]),
         builder: (context, snapshot) {
@@ -189,7 +182,4 @@ class TrainingsPlanState extends State<TrainingsPlan>
           }
         });
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

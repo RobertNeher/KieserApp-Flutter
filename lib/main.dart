@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:kieser/provider/storage.dart';
 import 'package:kieser/src/initialize.dart';
+import 'package:provider/provider.dart';
 // import 'package:window_manager/window_manager.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -17,8 +19,6 @@ void main() async {
   //   WindowManager.instance.setMaximumSize(const Size(1200, 600));
   // }
   final Database database;
-  // final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  // SharedPreferences prefs = await _prefs;
 
   if (kIsWeb) {
     database = await databaseFactoryWeb.openDatabase(DB_FILE);
@@ -28,7 +28,8 @@ void main() async {
 
   initializeApp(database);
 
-  runApp(KieserApp(database: database));
+  runApp(ChangeNotifierProvider<Storage>(
+      create: (_) => Storage(database), child: KieserApp(database: database)));
 }
 
 class KieserApp extends StatelessWidget {

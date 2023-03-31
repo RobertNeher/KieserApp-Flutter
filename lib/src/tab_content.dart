@@ -1,4 +1,3 @@
-// import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/machine.dart';
 import 'package:kieser/src/get_parameters.dart';
@@ -22,7 +21,8 @@ class TabContent extends StatefulWidget {
   State<TabContent> createState() => _TabContentState();
 }
 
-class _TabContentState extends State<TabContent> {
+class _TabContentState extends State<TabContent>
+    with AutomaticKeepAliveClientMixin {
   Map<String, dynamic> _machineDetail = {};
 
   Future<Map<String, dynamic>> _getMachineDetail() async {
@@ -38,8 +38,7 @@ class _TabContentState extends State<TabContent> {
 
   @override
   Widget build(BuildContext context) {
-    // html.File imageFile = html.File(
-    //     'assets/images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png');
+    super.build(context);
     return Container(
         width: 500,
         color: Colors.black,
@@ -95,7 +94,7 @@ class _TabContentState extends State<TabContent> {
                                           ),
                                           Image.network(
                                             'assets/images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png',
-                                            height: 75,
+                                            height: 100,
                                           ),
                                           const Divider(
                                             height: 20,
@@ -111,7 +110,7 @@ class _TabContentState extends State<TabContent> {
                                                 color: Colors.white),
                                           ),
                                           SizedBox(
-                                              height: 120,
+                                              height: 100,
                                               child: SingleChildScrollView(
                                                 scrollDirection: Axis.vertical,
                                                 reverse: false,
@@ -159,4 +158,8 @@ class _TabContentState extends State<TabContent> {
               }
             }));
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
