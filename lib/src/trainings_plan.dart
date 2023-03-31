@@ -22,9 +22,7 @@ class TrainingsPlan extends StatefulWidget {
 }
 
 class TrainingsPlanState extends State<TrainingsPlan>
-    with
-        TickerProviderStateMixin,
-        AutomaticKeepAliveClientMixin<TrainingsPlan> {
+    with TickerProviderStateMixin {
   late Visibility _fab;
   Map<String, dynamic> preferences = {};
   List<Map<String, dynamic>> _stations = [];
@@ -128,7 +126,7 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     return FutureBuilder<void>(
         future: Future.wait([_getPreferences(), _getStations()]),
         builder: (context, snapshot) {
@@ -184,7 +182,4 @@ class TrainingsPlanState extends State<TrainingsPlan>
           }
         });
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

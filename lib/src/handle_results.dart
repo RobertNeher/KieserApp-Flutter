@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/result.dart';
 import 'package:intl/intl.dart';
+import 'package:kieser/settings/lib/settings.dart';
 import 'package:sembast/sembast.dart';
 
 Future<List<Map<String, dynamic>>> getTrainingResults(
@@ -21,7 +22,7 @@ void saveResults(Database database, int customerID, DateTime dateTime,
   //     await getTrainingResults(database, customerID);
 
   final StoreRef resultsStore = intMapStoreFactory.store("results");
-  final StoreRef tempResult = intMapStoreFactory.store('temp');
+  final StoreRef tempResult = intMapStoreFactory.store(TEMP_STORE);
   Map<String, dynamic> temp = {};
   List<Map<String, dynamic>> results = [];
 
@@ -36,6 +37,11 @@ void saveResults(Database database, int customerID, DateTime dateTime,
     'trainingDate': df.format(DateTime.now()),
     'results': results
   });
+
+  tempResult.delete(database);
+
+  Result r = Result(database, customerID);
+  print(await r.getLatest());
 
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(

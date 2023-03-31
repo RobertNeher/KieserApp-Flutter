@@ -16,6 +16,7 @@ dependencies:
     path: './lib/model/'
   path:
   path_provider:
+  provider:
   sembast:
   sembast_web:
   settings:

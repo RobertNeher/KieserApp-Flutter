@@ -1,7 +1,5 @@
-// import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/machine.dart';
-import 'package:kieser/settings/lib/settings.dart';
 import 'package:kieser/src/get_parameters.dart';
 import 'package:kieser/src/training_result.dart';
 import 'package:sembast/sembast.dart';
@@ -23,7 +21,8 @@ class TabContent extends StatefulWidget {
   State<TabContent> createState() => _TabContentState();
 }
 
-class _TabContentState extends State<TabContent> {
+class _TabContentState extends State<TabContent>
+    with AutomaticKeepAliveClientMixin {
   Map<String, dynamic> _machineDetail = {};
 
   Future<Map<String, dynamic>> _getMachineDetail() async {
@@ -39,6 +38,7 @@ class _TabContentState extends State<TabContent> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
         width: 500,
         color: Colors.black,
@@ -158,4 +158,8 @@ class _TabContentState extends State<TabContent> {
               }
             }));
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
