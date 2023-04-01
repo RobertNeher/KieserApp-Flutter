@@ -3,7 +3,6 @@ import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/settings/lib/settings.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/login.dart';
-import 'package:sembast/sembast.dart';
 
 class AboutPage extends StatefulWidget {
   AboutPage({super.key, required this.title});

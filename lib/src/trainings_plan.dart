@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/preferences.dart';
+import 'package:kieser/provider/storage.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/handle_results.dart';
 import 'package:kieser/src/tab_content.dart';
 import 'package:model/plan.dart';
-import 'package:sembast/sembast.dart';
+import 'package:provider/provider.dart';
 
 class TrainingsPlan extends StatefulWidget {
   const TrainingsPlan({
@@ -65,7 +66,9 @@ class TrainingsPlanState extends State<TrainingsPlan>
           machineID: station['machineID'],
           moveForward: _moveForward));
     }
-    return TabBarView(controller: tabController, children: tabContents);
+    return Consumer<Storage>(builder: (context, storage, child) {
+      return TabBarView(controller: tabController, children: tabContents);
+    });
   }
 
   void _saveResults() {

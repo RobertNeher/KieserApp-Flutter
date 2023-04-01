@@ -3,7 +3,6 @@ import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/src/settings_page.dart';
 import 'package:kieser/src/results_page.dart';
 import 'package:kieser/src/handle_results.dart';
-import 'package:sembast/sembast.dart';
 
 Widget KieserDrawer(BuildContext context) {
   Map<String, dynamic> preferences = {};

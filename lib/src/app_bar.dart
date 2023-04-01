@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/customer.dart';
-import 'package:kieser/src/settings_page.dart';
-import 'package:sembast/sembast.dart';
 
 class KieserAppBar extends StatefulWidget with PreferredSizeWidget {
   KieserAppBar(

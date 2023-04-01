@@ -4,7 +4,6 @@ import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/drawer.dart';
 import 'package:kieser/src/trainings_plan.dart';
 import 'package:model/preferences.dart';
-import 'package:sembast/sembast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
