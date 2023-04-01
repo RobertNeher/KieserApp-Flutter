@@ -142,7 +142,7 @@ class _TabContentState extends State<TabContent>
                       ),
                       TrainingResultForm(
                           _machineDetail,
-                          widget.customerID, widget.moveForward)
+                            widget.customerID, widget.moveForward)
                     ]);
               } else {
                 return const Center(

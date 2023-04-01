@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/model/lib/result.dart';
+import 'package:kieser/provider/storage.dart';
 import 'package:kieser/settings/lib/settings.dart';
+import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
 
 Widget TrainingResultForm(
@@ -57,29 +59,29 @@ Widget TrainingResultForm(
     }
   }
 
-  Future<void> saveResults() async {
-    Map<String, dynamic> result = {
-      'machineID': machine['id'],
-      'duration':
-          _tecDuration.text.isNotEmpty ? int.parse(_tecDuration.text) : 0,
-      'weightDone':
-          _tecWeightDone.text.isNotEmpty ? int.parse(_tecWeightDone.text) : 0,
-      'weightPlanned': _tecWeightPlanned.text.isNotEmpty
-          ? int.parse(_tecWeightPlanned.text)
-          : 0
-    };
-    // print('Saving data for machine ${machine["id"]}:${result}');
+  // Future<void> saveResults() async {
+  //   Map<String, dynamic> result = {
+  //     'machineID': machine['id'],
+  //     'duration':
+  //         _tecDuration.text.isNotEmpty ? int.parse(_tecDuration.text) : 0,
+  //     'weightDone':
+  //         _tecWeightDone.text.isNotEmpty ? int.parse(_tecWeightDone.text) : 0,
+  //     'weightPlanned': _tecWeightPlanned.text.isNotEmpty
+  //         ? int.parse(_tecWeightPlanned.text)
+  //         : 0
+  //   };
+  //   // print('Saving data for machine ${machine["id"]}:${result}');
 
-    Finder finder = Finder(filter: Filter.equals('machineID', machine['id']));
-    List<RecordSnapshot> record =
-        await tempResult.find(database, finder: finder);
-    print(record.length);
-    if (record.length == 0) {
-      await tempResult.add(database, result);
-    } else if (record.length == 2) {
-      await tempResult.record(record[0].key).put(database, result);
-    }
-  }
+  //   Finder finder = Finder(filter: Filter.equals('machineID', machine['id']));
+  //   List<RecordSnapshot> record =
+  //       await tempResult.find(database, finder: finder);
+  //   print(record.length);
+  //   if (record.length == 0) {
+  //     await tempResult.add(database, result);
+  //   } else if (record.length == 2) {
+  //     await tempResult.record(record[0].key).put(database, result);
+  //   }
+  // }
 
   const IconData dumbBellIcon =
       IconData(0xe800, fontFamily: 'KieserApp', fontPackage: null);
@@ -95,10 +97,17 @@ Widget TrainingResultForm(
                   backgroundColor: Colors.blue, strokeWidth: 5));
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          return Form(
+          return Consumer<Storage>(builder: (context, storage, child) {
+            return Form(
               key: formKey,
               onChanged: () {
-                saveResults();
+                  storage.ping({
+                    'machineID': machine['id'],
+                    'duration': int.parse(_tecDuration.text),
+                    'weightDone': int.parse(_tecWeightDone.text),
+                    'weightPlanned': int.parse(_tecWeightPlanned.text)
+                  });
+                  // saveResults();
               },
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -231,7 +240,8 @@ Widget TrainingResultForm(
                             color: Colors.white),
                       ),
                     ])
-                  ]));
+                    ]));
+          });
         } else {
           return const Center(
               child: Text('Something went wrong!',

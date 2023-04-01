@@ -66,9 +66,7 @@ class TrainingsPlanState extends State<TrainingsPlan>
           machineID: station['machineID'],
           moveForward: _moveForward));
     }
-    return Consumer<Storage>(builder: (context, storage, child) {
-      return TabBarView(controller: tabController, children: tabContents);
-    });
+    return TabBarView(controller: tabController, children: tabContents);
   }
 
   void _saveResults() {
