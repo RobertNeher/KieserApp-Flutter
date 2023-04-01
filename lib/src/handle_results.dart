@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:kieser/model/lib/result.dart';
 import 'package:intl/intl.dart';
 import 'package:kieser/settings/lib/settings.dart';
@@ -8,18 +9,17 @@ Future<List<Map<String, dynamic>>> getTrainingResults(
     Database database, int customerID) async {
   List<Map<String, dynamic>> results = [];
 
-  Result _results = Result(database, customerID);
+  Result _results = Result(customerID);
 
   results = await _results.getAll();
 
   return results;
 }
 
-void saveResults(Database database, int customerID, DateTime dateTime,
-    BuildContext context) async {
+void saveResults(
+    int customerID, DateTime dateTime, BuildContext context) async {
+  final Database database = GetIt.I.get();
   final DateFormat df = DateFormat('yyyy-MM-dd');
-  // final List<Map<String, dynamic>> results =
-  //     await getTrainingResults(database, customerID);
 
   final StoreRef resultsStore = intMapStoreFactory.store("results");
   final StoreRef tempResult = intMapStoreFactory.store(TEMP_STORE);
@@ -40,9 +40,6 @@ void saveResults(Database database, int customerID, DateTime dateTime,
 
   tempResult.delete(database);
 
-  Result r = Result(database, customerID);
-  print(await r.getLatest());
-
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
       content:
@@ -51,7 +48,8 @@ void saveResults(Database database, int customerID, DateTime dateTime,
   );
 }
 
-void removeCustomerResults(Database database, int customerID) async {
+void removeCustomerResults(int customerID) async {
+  final Database database = GetIt.I.get();
   final StoreRef resultsStore = intMapStoreFactory.store("results");
   Finder finder = Finder(filter: Filter.equals('customerID', customerID));
   await resultsStore.delete(database, finder: finder);

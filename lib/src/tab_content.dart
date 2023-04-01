@@ -7,12 +7,10 @@ import 'package:sembast/sembast.dart';
 class TabContent extends StatefulWidget {
   const TabContent(
       {Key? key,
-      required this.database,
       required this.customerID,
       required this.machineID,
       required this.moveForward})
       : super(key: key);
-  final Database database;
   final int customerID;
   final String machineID;
   final VoidCallback moveForward;
@@ -26,7 +24,7 @@ class _TabContentState extends State<TabContent>
   Map<String, dynamic> _machineDetail = {};
 
   Future<Map<String, dynamic>> _getMachineDetail() async {
-    Machine machine = Machine(widget.database);
+    Machine machine = Machine();
     _machineDetail = await machine.findByID(widget.machineID);
     return _machineDetail;
   }
@@ -135,7 +133,6 @@ class _TabContentState extends State<TabContent>
                                     alignment: Alignment.topRight,
                                     width: 175,
                                     child: ShowParameterAndValues(
-                                        database: widget.database,
                                         customerID: widget.customerID,
                                         machineID: _machineDetail['id'])),
                               ])),
@@ -144,7 +141,8 @@ class _TabContentState extends State<TabContent>
                         thickness: 1,
                         color: Colors.blue,
                       ),
-                      TrainingResultForm(_machineDetail, widget.database,
+                      TrainingResultForm(
+                          _machineDetail,
                           widget.customerID, widget.moveForward)
                     ]);
               } else {

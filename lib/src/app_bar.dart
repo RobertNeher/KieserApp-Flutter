@@ -6,11 +6,9 @@ import 'package:sembast/sembast.dart';
 class KieserAppBar extends StatefulWidget with PreferredSizeWidget {
   KieserAppBar(
       {Key? key,
-      required this.database,
       required this.customerID,
       required this.title})
       : super(key: key);
-  final Database database;
   final int customerID;
   final String title;
 
@@ -26,7 +24,7 @@ class _KieserAppBarState extends State<KieserAppBar> {
     Map<String, dynamic> _customerDetail = {};
 
     Future<void> _getCustomerDetail() async {
-      Customer customer = Customer(widget.database);
+      Customer customer = Customer();
       _customerDetail = await customer.findByID(widget.customerID);
     }
 

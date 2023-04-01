@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 
 class Preferences {
@@ -5,8 +6,8 @@ class Preferences {
   late StoreRef _prefDataStore;
   Map<String, dynamic> prefData = {};
 
-  Preferences(Database database) {
-    _database = database;
+  Preferences() {
+    _database = GetIt.I.get();
     _prefDataStore = intMapStoreFactory.store("preferences");
   }
 

@@ -7,8 +7,7 @@ import 'package:model/preferences.dart';
 import 'package:sembast/sembast.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, required this.title, required this.database});
-  final Database database;
+  const LoginPage({super.key, required this.title});
   final String title;
 
   @override
@@ -23,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   late TextEditingController tec;
 
   Future<Map<String, dynamic>> _getPrefs() async {
-    Preferences p = Preferences(widget.database);
+    Preferences p = Preferences();
     preferences = await p.loadPrefs();
     _customerID = preferences['customerID'];
     tec = TextEditingController(text: _customerID.toString());
@@ -42,9 +41,8 @@ class _LoginPageState extends State<LoginPage> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-                appBar: KieserAppBar(
-                    database: widget.database, customerID: 0, title: 'Login'),
-                drawer: KieserDrawer(context, widget.database),
+                appBar: KieserAppBar(customerID: 0, title: 'Login'),
+                drawer: KieserDrawer(context),
                 body: Container(
                     width: 500,
                     height: 400,
@@ -84,9 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                                     _customerID = int.parse(tec.text);
                                   }
 
-                                  return TrainingsPlan(
-                                      database: widget.database,
-                                      customerID: _customerID);
+                                  return TrainingsPlan(customerID: _customerID);
                                 }));
                               }),
                         ]))));

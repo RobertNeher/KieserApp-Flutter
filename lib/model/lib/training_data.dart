@@ -1,4 +1,5 @@
 // import 'package:model/customer.dart';
+import 'package:get_it/get_it.dart';
 import 'package:model/plan.dart';
 import 'package:model/machine.dart';
 import 'package:sembast/sembast.dart';
@@ -13,11 +14,11 @@ class TrainingData {
     machines = await machine.getAll();
   }
 
-  TrainingData(Database database, int customerID) {
-    _database = database;
-    Machine machine = Machine(_database);
+  TrainingData(int customerID) {
+    _database = GetIt.I.get();
+    Machine machine = Machine();
     customerID = customerID;
     _getMachines(machine);
-    plan = Plan(_database, customerID);
+    plan = Plan(customerID);
   }
 }

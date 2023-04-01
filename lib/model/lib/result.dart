@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:settings/settings.dart';
@@ -8,8 +9,8 @@ class Result {
   List<Map<String, dynamic>> _results = [];
   final StoreRef _resultsStore = intMapStoreFactory.store("results");
 
-  Result(Database database, int customerID) {
-    _database = database;
+  Result(int customerID) {
+    _database = GetIt.I.get();
     _customerID = customerID;
   }
 
@@ -44,7 +45,7 @@ void main(List<String> args) async {
   StoreRef resultStore = intMapStoreFactory.store('results');
 
 List<Map<String, dynamic>> machines = [];
-  Result r = Result(database, 19711);
+  Result r = Result(19711);
   Map<String, dynamic> latestResult = await r.getLatest();
   // print(latestResult['results']);
 

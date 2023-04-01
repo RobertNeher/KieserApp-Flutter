@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 
 class Machine {
@@ -18,8 +19,8 @@ class Machine {
     return _machines;
   }
 
-  Machine(Database database) {
-    _database = database;
+  Machine() {
+    _database = GetIt.I.get();
     _machineStore = intMapStoreFactory.store("machines");
     getAll();
   }
