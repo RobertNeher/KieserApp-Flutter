@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:kieser/settings/lib/settings.dart';
 import 'package:sembast/sembast.dart';
-// import 'package:provider/provider.dart';
-
+import 'package:intl/intl.dart';
 class Storage with ChangeNotifier {
   late final Database _database;
   late StoreRef _tempStore;
@@ -11,9 +10,14 @@ class Storage with ChangeNotifier {
   List<Map<String, dynamic>> _trainingResults = <Map<String, dynamic>>[];
 
   Storage(Database database) {
-    _database = database;
+    _database = GetIt.I.get();
     _tempStore = intMapStoreFactory.store(TEMP_STORE);
     _resultStore = intMapStoreFactory.store('results');
+  }
+
+  void ping(Map<String, dynamic> result) {
+    DateFormat df = DateFormat('yyyy-MM-dd HH:mm');
+    print('provider ping @ ${df.format(DateTime.now())}: $result');
   }
 
   List<Map<String, dynamic>> get results {

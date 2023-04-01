@@ -11,10 +11,8 @@ import 'package:sembast/sembast.dart';
 class TrainingsPlan extends StatefulWidget {
   const TrainingsPlan({
     Key? key,
-    required this.database,
     required this.customerID,
   }) : super(key: key);
-  final Database database;
   final int customerID;
 
   @override
@@ -46,12 +44,12 @@ class TrainingsPlanState extends State<TrainingsPlan>
   }
 
   Future<void> _getStations() async {
-    Plan plan = Plan(widget.database, widget.customerID);
+    Plan plan = Plan(widget.customerID);
     _stations = await plan.getStations();
   }
 
   Future<Map<String, dynamic>> _getPreferences() async {
-    Preferences p = Preferences(widget.database);
+    Preferences p = Preferences();
     preferences = await p.loadPrefs();
 
     return preferences;
@@ -63,7 +61,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
     for (Map<String, dynamic> station in _stations) {
       tabContents.add(TabContent(
-          database: widget.database,
           customerID: widget.customerID,
           machineID: station['machineID'],
           moveForward: _moveForward));
@@ -73,7 +70,7 @@ class TrainingsPlanState extends State<TrainingsPlan>
 
   void _saveResults() {
     if (_tabController.index == _stations.length - 1) {
-      saveResults(widget.database, widget.customerID, DateTime.now(), context);
+      saveResults(widget.customerID, DateTime.now(), context);
     }
   }
 
@@ -142,7 +139,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
             _tabController.addListener(_handleTabSelection);
             return Scaffold(
                 appBar: KieserAppBar(
-                  database: widget.database,
                   customerID: widget.customerID,
                   title: _title,
                 ),

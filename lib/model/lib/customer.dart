@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 
 class Customer {
@@ -16,8 +17,8 @@ class Customer {
     return customerList;
   }
 
-  Customer(Database database) {
-    _database = database;
+  Customer() {
+    _database = GetIt.I.get();
     _customerStore = intMapStoreFactory.store("customers");
 
     _findCustomers().then((value) {

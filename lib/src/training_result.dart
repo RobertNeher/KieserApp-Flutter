@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/model/lib/result.dart';
 import 'package:kieser/settings/lib/settings.dart';
 import 'package:sembast/sembast.dart';
 
-Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
-    int customerID, void Function() moveForward) {
+Widget TrainingResultForm(
+    Map<String, dynamic> machine, int customerID, void Function() moveForward) {
+  Database database = GetIt.I.get();
   Map<String, dynamic> preferences = {};
   Map<String, dynamic> lastResult = {};
   GlobalKey formKey = GlobalKey<FormState>();
@@ -16,12 +18,12 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
   StoreRef tempResult = intMapStoreFactory.store(TEMP_STORE);
 
   Future<void> getResults(int customerID) async {
-    Result r = Result(database, customerID);
+    Result r = Result(customerID);
     lastResult = await r.getLatest();
   }
 
   Future<Map<String, dynamic>> getStationResult(String machineID) async {
-    Result r = Result(database, customerID);
+    Result r = Result(customerID);
     Map<String, dynamic> latestResult = await r.getLatest();
 
     for (Map<String, dynamic> station in latestResult['results']) {
@@ -33,8 +35,8 @@ Widget TrainingResultForm(Map<String, dynamic> machine, Database database,
   }
 
   Future<void> getDefaults() async {
-    Preferences p = Preferences(database);
-    Result r = Result(database, customerID);
+    Preferences p = Preferences();
+    Result r = Result(customerID);
     lastResult = await r.getLatest();
     preferences = await p.loadPrefs();
 

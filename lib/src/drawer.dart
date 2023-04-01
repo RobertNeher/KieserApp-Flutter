@@ -5,12 +5,12 @@ import 'package:kieser/src/results_page.dart';
 import 'package:kieser/src/handle_results.dart';
 import 'package:sembast/sembast.dart';
 
-Widget KieserDrawer(BuildContext context, Database database) {
+Widget KieserDrawer(BuildContext context) {
   Map<String, dynamic> preferences = {};
   int customerID = 0;
 
   Future<Map<String, dynamic>> getPreferences() async {
-    Preferences p = Preferences(database);
+    Preferences p = Preferences();
     preferences = await p.loadPrefs();
 
     return preferences;
@@ -31,7 +31,7 @@ Widget KieserDrawer(BuildContext context, Database database) {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      SettingsPage(database: database, title: "Einstellungen"),
+                      SettingsPage(title: "Einstellungen"),
                 ));
           },
         ),
@@ -43,7 +43,6 @@ Widget KieserDrawer(BuildContext context, Database database) {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ResultsPage(
-                      database: database,
                       customerID: preferences['customerID'],
                       title: "Letzte Ergebnisse"),
                 ));
@@ -53,21 +52,21 @@ Widget KieserDrawer(BuildContext context, Database database) {
           leading: const Icon(Icons.remove),
           title: const Text('Löschen aller Daten'),
           onTap: () {
-            ConfirmDeletionDialog(context, database, customerID);
+            ConfirmDeletionDialog(context, customerID);
           },
         ),
       ]));
 }
 
 void ConfirmDeletionDialog(
-    BuildContext context, Database database, int customerID) {
+    BuildContext context, int customerID) {
   Widget okButton = TextButton(
     child: const Text("Ja"),
     onPressed: () {
       const SnackBar snackBar =
           SnackBar(content: Text('Alle Daten sind gelöscht!'));
 
-      removeCustomerResults(database, customerID);
+      removeCustomerResults(customerID);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Navigator.of(context).pop();
     },

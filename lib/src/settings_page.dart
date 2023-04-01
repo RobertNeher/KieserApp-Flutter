@@ -2,13 +2,13 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:sembast/sembast.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key, required this.title, required this.database});
-  final Database database;
+  const SettingsPage({super.key, required this.title});
   final String title;
 
   @override
@@ -26,7 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
   TextEditingController _tec_defaultDuration = TextEditingController();
 
   Future<Map<String, dynamic>> _loadPrefs() async {
-    Preferences p = Preferences(widget.database);
+    Preferences p = Preferences();
     preferences = await p.loadPrefs();
     _tec_customerID.text = preferences['customerID'].toString();
     _tec_defaultDuration.text = preferences['defaultDuration'].toString();
@@ -36,6 +36,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<int> _savePrefs() async {
+    final Database database = GetIt.I.get();
     Map<String, dynamic> values = {
       'customerID': int.parse(_tec_customerID.text),
       'defaultDuration': int.parse(_tec_defaultDuration.text),
@@ -43,9 +44,9 @@ class _SettingsPageState extends State<SettingsPage> {
     };
 
     StoreRef prefDataStore = intMapStoreFactory.store("preferences");
-    List<RecordSnapshot> record = await prefDataStore.find(widget.database);
+    List<RecordSnapshot> record = await prefDataStore.find(database);
     Finder finder = Finder(filter: Filter.byKey(record.first.key));
-    return await prefDataStore.update(widget.database, values, finder: finder);
+    return await prefDataStore.update(database, values, finder: finder);
   }
 
   @override
@@ -64,7 +65,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   preferredSize: const Size.fromHeight(40),
                   child: KieserAppBar(
                     title: widget.title,
-                    database: widget.database,
                     customerID: 0,
                   ),
                 ),

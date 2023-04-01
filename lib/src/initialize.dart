@@ -1,15 +1,18 @@
+import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 
 import 'package:settings/settings.dart';
 
-void initializeApp(Database database) async {
+void initializeApp() async {
   final StoreRef customersStore = intMapStoreFactory.store("customers");
   final StoreRef machinesStore = intMapStoreFactory.store("machines");
   final StoreRef plansStore = intMapStoreFactory.store("plans");
   final StoreRef resultsStore = intMapStoreFactory.store("results");
   final StoreRef prefsStore = intMapStoreFactory.store("preferences");
   final StoreRef tempStore = intMapStoreFactory.store(TEMP_STORE);
+
+  final Database database = GetIt.I.get();
 
   await customersStore.delete(database);
   await machinesStore.delete(database);
@@ -41,6 +44,8 @@ void initializeApp(Database database) async {
 void main(List<String> args) async {
   final Database database = await databaseFactoryIo.openDatabase(DB_FILE);
 
-  initializeApp(database);
+  GetIt.I.registerSingleton<Database>(database);
+
+  initializeApp();
   print('Initialization of database ($DB_FILE) done');
 }

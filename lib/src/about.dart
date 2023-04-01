@@ -6,8 +6,7 @@ import 'package:kieser/src/login.dart';
 import 'package:sembast/sembast.dart';
 
 class AboutPage extends StatefulWidget {
-  AboutPage({super.key, required this.title, required this.database});
-  final Database database;
+  AboutPage({super.key, required this.title});
   final String title;
 
   @override
@@ -19,7 +18,7 @@ class _AboutPageState extends State<AboutPage> {
   int _defaultDuration = 0;
 
   Future<Map<String, dynamic>> _getPrefs() async {
-    Preferences p = Preferences(widget.database);
+    Preferences p = Preferences();
     _preferences = await p.loadPrefs();
     _defaultDuration = _preferences['defaultDuration'];
     return _preferences;
@@ -38,7 +37,6 @@ class _AboutPageState extends State<AboutPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
                 appBar: KieserAppBar(
-                    database: widget.database,
                     customerID: 0,
                     title: 'About KieserApp'),
                 body: Container(
@@ -71,9 +69,8 @@ class _AboutPageState extends State<AboutPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => LoginPage(
-                                            title: 'Login',
-                                            database: widget.database)));
+                                        builder: (context) =>
+                                            const LoginPage(title: 'Login')));
                               })
                         ])));
           } else {

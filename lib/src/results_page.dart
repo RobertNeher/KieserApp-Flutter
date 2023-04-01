@@ -8,13 +8,11 @@ import 'package:sembast/sembast.dart';
 class ResultsPage extends StatefulWidget {
   const ResultsPage({
     super.key,
-    required this.database,
     required this.title,
     required this.customerID,
   });
   final String title;
   final int customerID;
-  final Database database;
 
   @override
   State<ResultsPage> createState() => _ResultsPageState();
@@ -63,8 +61,8 @@ class _ResultsPageState extends State<ResultsPage> {
   List<Widget> _resultTables = [];
 
   Future<List<Map<String, dynamic>>> getTrainingResults(
-      Database database, int customerID) async {
-    Result results = Result(database, customerID);
+      int customerID) async {
+    Result results = Result(customerID);
 
     _results = await results.getAll();
 
@@ -79,7 +77,7 @@ class _ResultsPageState extends State<ResultsPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Map<String, dynamic>>>(
-        future: getTrainingResults(widget.database, widget.customerID),
+        future: getTrainingResults(widget.customerID),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -109,7 +107,6 @@ class _ResultsPageState extends State<ResultsPage> {
                     appBar: PreferredSize(
                       preferredSize: const Size.fromHeight(40),
                       child: KieserAppBar(
-                          database: widget.database,
                           customerID: widget.customerID,
                           title: widget.title),
                     ),

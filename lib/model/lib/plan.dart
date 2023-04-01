@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 import 'package:model/machine.dart';
 import 'package:sembast/sembast_io.dart';
@@ -9,8 +10,8 @@ class Plan {
   final List<Map<String, dynamic>> _plans = [];
   final StoreRef _plansStore = intMapStoreFactory.store("plans");
 
-  Plan(Database database, int customerID) {
-    _database = database;
+  Plan(int customerID) {
+    _database = GetIt.I.get();
     _customerID = customerID;
     getAll().then((value) => _plans);
   }
@@ -26,7 +27,7 @@ class Plan {
   }
 
   Future<List<String>> getStationParameters(String stationID) async {
-    Machine machines = Machine(_database!);
+    Machine machines = Machine();
     List<Map<String, dynamic>> allMachines = await machines.getAll();
 
     for (Map<String, dynamic> machine in allMachines) {
@@ -85,6 +86,6 @@ class Plan {
 void main(List<String> args) async {
   Database database = await databaseFactoryIo.openDatabase(DB_FILE);
 
-  Plan p = Plan(database, 19711);
+  Plan p = Plan(19711);
   print(await p.getLatest());
 }

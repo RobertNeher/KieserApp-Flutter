@@ -10,11 +10,9 @@ const double ROW_HEIGHT = 35;
 class ShowParameterAndValues extends StatefulWidget {
   const ShowParameterAndValues(
       {Key? key,
-      required this.database,
       required this.customerID,
       required this.machineID})
       : super(key: key);
-  final Database database;
   final int customerID;
   final String machineID;
 
@@ -42,8 +40,8 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
   @override
   void initState() {
     super.initState();
-    trainingsPlan = Plan(widget.database, widget.customerID);
-    machines = Machine(widget.database);
+    trainingsPlan = Plan(widget.customerID);
+    machines = Machine();
     // _getParameters();
     // _getParameterValues();
   }

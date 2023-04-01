@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:kieser/provider/storage.dart';
 import 'package:kieser/src/initialize.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,8 @@ import 'package:kieser/src/about.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+
   // await windowManager.ensureInitialized();
   // if (Platform.isWindows) {
   //   WindowManager.instance.setMinimumSize(const Size(1200, 600));
@@ -26,15 +29,16 @@ void main() async {
     database = await databaseFactoryIo.openDatabase(DB_FILE);
   }
 
-  initializeApp(database);
+  GetIt.I.registerSingleton<Database>(database);
+
+  initializeApp();
 
   runApp(ChangeNotifierProvider<Storage>(
-      create: (_) => Storage(database), child: KieserApp(database: database)));
+      create: (_) => Storage(database), child: KieserApp()));
 }
 
 class KieserApp extends StatelessWidget {
-  KieserApp({super.key, required this.database});
-  final Database database;
+  KieserApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,7 +47,7 @@ class KieserApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AboutPage(title: APP_TITLE, database: database),
+      home: AboutPage(title: APP_TITLE),
     );
   }
 }
