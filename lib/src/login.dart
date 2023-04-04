@@ -24,8 +24,14 @@ class _LoginPageState extends State<LoginPage> {
     Preferences p = Preferences();
     preferences = await p.loadPrefs();
     _customerID = preferences['customerID'];
-    tec = TextEditingController(text: _customerID.toString());
+    tec.text = _customerID.toString();
     return preferences;
+  }
+
+  @override
+  void initState() {
+    tec = TextEditingController(text: _customerID.toString());
+    super.initState();
   }
 
   @override
@@ -40,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-                appBar: KieserAppBar(customerID: 0, title: 'Login'),
+                appBar: KieserAppBar(customerID: _customerID, title: 'Login'),
                 drawer: KieserDrawer(context),
                 body: Container(
                     width: 500,

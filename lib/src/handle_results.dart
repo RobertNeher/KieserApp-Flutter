@@ -30,7 +30,9 @@ void saveResults(
 
   for (RecordSnapshot stationResult in tempResults) {
     temp = stationResult.value as Map<String, dynamic>;
-    results.add(temp);
+    if (!results.asMap().containsValue(temp['machineID'])) {
+      results.add(temp);
+    }
   }
   await resultsStore.add(database, {
     'customerID': customerID,

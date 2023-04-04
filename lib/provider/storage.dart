@@ -3,39 +3,37 @@ import 'package:get_it/get_it.dart';
 import 'package:kieser/settings/lib/settings.dart';
 import 'package:sembast/sembast.dart';
 import 'package:intl/intl.dart';
+
 class Storage with ChangeNotifier {
   late final Database _database;
   late StoreRef _tempStore;
-  late StoreRef _resultStore;
   List<Map<String, dynamic>> _trainingResults = <Map<String, dynamic>>[];
 
   Storage(Database database) {
     _database = GetIt.I.get();
     _tempStore = intMapStoreFactory.store(TEMP_STORE);
-    _resultStore = intMapStoreFactory.store('results');
-  }
-
-  void ping(Map<String, dynamic> result) {
-    DateFormat df = DateFormat('yyyy-MM-dd HH:mm');
-    print('provider ping @ ${df.format(DateTime.now())}: $result');
   }
 
   List<Map<String, dynamic>> get results {
     return _trainingResults;
   }
 
-  void addResult(Map<String, dynamic> stationResult) {
-    for (Map<String, dynamic> result in _trainingResults) {
-      Map<String, dynamic> target = _trainingResults.firstWhere(
-          (item) => item["machineID"] == stationResult['machineID']);
-      if (target.isNotEmpty) {
-        target['duration'] = stationResult['duration'];
-        target['weightDone'] = stationResult['weightDone'];
-        target['weightPlanned'] = stationResult['weightPlanned'];
-        break;
-      } else {
-        _trainingResults.add(stationResult);
-      }
+  Future<void> addResult(Map<String, dynamic> stationResult) async {
+    Finder finder =
+        Finder(filter: Filter.equals('machineID', stationResult['machineID']));
+    var records = await _tempStore.findFirst(_database, finder: finder);
+
+    if (records == null) {
+      await _tempStore.add(_database, stationResult);
+    } else {
+      Map<String, dynamic> result = {
+        'machineID': stationResult['machineID'],
+        'duration': stationResult['duration'],
+        'weightDone': stationResult['weightDone'],
+        'weightPlanned': stationResult['weightPlanned']
+      };
+      print(result);
+      await _tempStore.record(records.key).put(_database, result);
     }
     notifyListeners();
   }
