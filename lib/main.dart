@@ -15,7 +15,6 @@ import 'package:kieser/src/about.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
   // await windowManager.ensureInitialized();
   // if (Platform.isWindows) {
   //   WindowManager.instance.setMinimumSize(const Size(1200, 600));
@@ -34,7 +33,7 @@ void main() async {
   initializeApp();
 
   runApp(ChangeNotifierProvider<Storage>(
-      create: (_) => Storage(database), child: KieserApp()));
+      create: (_) => Storage(), child: KieserApp()));
 }
 
 class KieserApp extends StatelessWidget {

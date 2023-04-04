@@ -3,13 +3,14 @@ import 'package:get_it/get_it.dart';
 import 'package:kieser/settings/lib/settings.dart';
 import 'package:sembast/sembast.dart';
 import 'package:intl/intl.dart';
+
 class Storage with ChangeNotifier {
   late final Database _database;
   late StoreRef _tempStore;
   late StoreRef _resultStore;
   List<Map<String, dynamic>> _trainingResults = <Map<String, dynamic>>[];
 
-  Storage(Database database) {
+  Storage() {
     _database = GetIt.I.get();
     _tempStore = intMapStoreFactory.store(TEMP_STORE);
     _resultStore = intMapStoreFactory.store('results');
