@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/settings/lib/settings.dart';
