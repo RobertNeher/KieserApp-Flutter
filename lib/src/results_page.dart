@@ -22,12 +22,14 @@ Widget _getResultTable(Map<String, dynamic> trainingResult) {
   List<DataRow> rowData = <DataRow>[];
 
   for (Map<String, dynamic> result in trainingResult['results']) {
-    rowData.add(DataRow(cells: [
-      DataCell(Text(result['machineID'])),
-      DataCell(Text(result['duration'].toString())),
-      DataCell(Text(result['weightDone'].toString())),
-      DataCell(Text(result['weightPlanned'].toString())),
-    ]));
+    if (result['duration'] > 0) {
+      rowData.add(DataRow(cells: [
+        DataCell(Text(result['machineID'])),
+        DataCell(Text(result['duration'].toString())),
+        DataCell(Text(result['weightDone'].toString())),
+        DataCell(Text(result['weightPlanned'].toString())),
+      ]));
+    }
   }
   return DataTable(
     columns: const <DataColumn>[
@@ -60,8 +62,7 @@ class _ResultsPageState extends State<ResultsPage> {
   List<Tab> _trainingTabs = [];
   List<Widget> _resultTables = [];
 
-  Future<List<Map<String, dynamic>>> getTrainingResults(
-      int customerID) async {
+  Future<List<Map<String, dynamic>>> getTrainingResults(int customerID) async {
     Result results = Result(customerID);
 
     _results = await results.getAll();
@@ -107,8 +108,7 @@ class _ResultsPageState extends State<ResultsPage> {
                     appBar: PreferredSize(
                       preferredSize: const Size.fromHeight(40),
                       child: KieserAppBar(
-                          customerID: widget.customerID,
-                          title: widget.title),
+                          customerID: widget.customerID, title: widget.title),
                     ),
                     body: Column(
                         mainAxisAlignment: MainAxisAlignment.start,

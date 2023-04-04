@@ -16,7 +16,7 @@ class Result {
 
   Future<List<Map<String, dynamic>>> getAll() async {
     Finder finder = Finder(
-        filter: Filter.equals('customerID', 19711),
+        filter: Filter.equals('customerID', _customerID),
         sortOrders: [SortOrder('trainingDate', false)]);
     var trainings = await _resultsStore.find(_database!, finder: finder);
 
@@ -30,7 +30,7 @@ class Result {
 
   Future<Map<String, dynamic>> getLatest() async {
     Finder finder = Finder(
-        filter: Filter.equals('customerID', 19711),
+        filter: Filter.equals('customerID', _customerID),
         sortOrders: [SortOrder('trainingDate', false)]);
     var latest = await _resultsStore.findFirst(_database!, finder: finder);
 
@@ -44,7 +44,7 @@ void main(List<String> args) async {
   Database database = await databaseFactoryIo.openDatabase(DB_FILE);
   StoreRef resultStore = intMapStoreFactory.store('results');
 
-List<Map<String, dynamic>> machines = [];
+  List<Map<String, dynamic>> machines = [];
   Result r = Result(19711);
   Map<String, dynamic> latestResult = await r.getLatest();
   // print(latestResult['results']);

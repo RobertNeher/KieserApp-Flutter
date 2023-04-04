@@ -73,7 +73,7 @@ Widget TrainingResultForm(
     Finder finder = Finder(filter: Filter.equals('machineID', machine['id']));
     List<RecordSnapshot> record =
         await tempResult.find(database, finder: finder);
-    print(record.length);
+
     if (record.length == 0) {
       await tempResult.add(database, result);
     } else if (record.length == 2) {
