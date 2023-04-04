@@ -1,13 +1,10 @@
+import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/customer.dart';
-import 'package:kieser/src/settings_page.dart';
-import 'package:sembast/sembast.dart';
 
 class KieserAppBar extends StatefulWidget with PreferredSizeWidget {
-  KieserAppBar(
-      {Key? key,
-      required this.customerID,
-      required this.title})
+  KieserAppBar({Key? key, required this.customerID, required this.title})
       : super(key: key);
   final int customerID;
   final String title;

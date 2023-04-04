@@ -40,11 +40,9 @@ Widget TrainingResultForm(
     lastResult = await r.getLatest();
     preferences = await p.loadPrefs();
 
-    int defaultDuration = preferences['defaultDuration'];
     Map<String, dynamic> defaults = await getStationResult(machine['id']);
     if (_tecDuration.text.isEmpty) {
-      _tecDuration.text = '0';
-      //       (defaults['duration'] == null || defaults['duration'] == 0)
+      _tecDuration.text = defaults['duration'].toString();
       //           ? defaultDuration.toString()
       //           : defaults['duration'].toString();
     }
@@ -57,7 +55,7 @@ Widget TrainingResultForm(
     }
   }
 
-  Future<void> saveResults() async {
+  Future<void> saveTempResults() async {
     Map<String, dynamic> result = {
       'machineID': machine['id'],
       'duration':
@@ -68,7 +66,6 @@ Widget TrainingResultForm(
           ? int.parse(_tecWeightPlanned.text)
           : 0
     };
-    // print('Saving data for machine ${machine["id"]}:${result}');
 
     Finder finder = Finder(filter: Filter.equals('machineID', machine['id']));
     List<RecordSnapshot> record =
@@ -76,7 +73,7 @@ Widget TrainingResultForm(
 
     if (record.length == 0) {
       await tempResult.add(database, result);
-    } else if (record.length == 2) {
+    } else if (record.length >= 2) {
       await tempResult.record(record[0].key).put(database, result);
     }
   }
@@ -98,7 +95,7 @@ Widget TrainingResultForm(
           return Form(
               key: formKey,
               onChanged: () {
-                saveResults();
+                saveTempResults();
               },
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

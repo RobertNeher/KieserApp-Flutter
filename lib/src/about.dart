@@ -1,9 +1,10 @@
+import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/settings/lib/settings.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/login.dart';
-import 'package:sembast/sembast.dart';
 
 class AboutPage extends StatefulWidget {
   AboutPage({super.key, required this.title});
@@ -36,9 +37,7 @@ class _AboutPageState extends State<AboutPage> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-                appBar: KieserAppBar(
-                    customerID: 0,
-                    title: 'About KieserApp'),
+                appBar: KieserAppBar(customerID: 0, title: 'About KieserApp'),
                 body: Container(
                     alignment: Alignment.topCenter,
                     child: Column(

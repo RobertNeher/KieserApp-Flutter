@@ -16,11 +16,6 @@ class Storage with ChangeNotifier {
     _resultStore = intMapStoreFactory.store('results');
   }
 
-  void ping(Map<String, dynamic> result) {
-    DateFormat df = DateFormat('yyyy-MM-dd HH:mm');
-    print('provider ping @ ${df.format(DateTime.now())}: $result');
-  }
-
   List<Map<String, dynamic>> get results {
     return _trainingResults;
   }
@@ -35,7 +30,9 @@ class Storage with ChangeNotifier {
         target['weightPlanned'] = stationResult['weightPlanned'];
         break;
       } else {
-        _trainingResults.add(stationResult);
+        if (result['duration'] > 0) {
+          _trainingResults.add(stationResult);
+        }
       }
     }
     notifyListeners();

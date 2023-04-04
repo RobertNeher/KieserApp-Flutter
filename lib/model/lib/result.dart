@@ -32,9 +32,10 @@ class Result {
     Finder finder = Finder(
         filter: Filter.equals('customerID', _customerID),
         sortOrders: [SortOrder('trainingDate', false)]);
-    var latest = await _resultsStore.findFirst(_database!, finder: finder);
+    RecordSnapshot? latest =
+        await _resultsStore.findFirst(_database!, finder: finder);
 
-    _results = _results = [latest!.value as Map<String, dynamic>];
+    _results = [latest!.value as Map<String, dynamic>];
 
     return _results[0];
   }
