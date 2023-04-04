@@ -55,7 +55,7 @@ class _AboutPageState extends State<AboutPage> {
                                 fontFamily: "Roboto",
                                 decoration: TextDecoration.none,
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.normal,
                               ),
                             ),
