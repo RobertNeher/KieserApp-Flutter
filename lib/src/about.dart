@@ -35,9 +35,7 @@ class _AboutPageState extends State<AboutPage> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-                appBar: KieserAppBar(
-                    customerID: 0,
-                    title: 'About KieserApp'),
+                appBar: KieserAppBar(customerID: 0, title: 'About KieserApp'),
                 body: Container(
                     alignment: Alignment.topCenter,
                     child: Column(
@@ -57,7 +55,7 @@ class _AboutPageState extends State<AboutPage> {
                                 fontFamily: "Roboto",
                                 decoration: TextDecoration.none,
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.normal,
                               ),
                             ),

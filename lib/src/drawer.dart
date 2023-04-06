@@ -31,8 +31,7 @@ Widget KieserDrawer(BuildContext context) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      SettingsPage(title: "Einstellungen"),
+                  builder: (context) => SettingsPage(title: "Einstellungen"),
                 ));
           },
         ),
@@ -45,20 +44,20 @@ Widget KieserDrawer(BuildContext context) {
                 MaterialPageRoute(
                   builder: (context) => ResultsPage(
                       customerID: preferences['customerID'],
-                      title: "Letzte Ergebnisse"),
+                      title: "Übersicht Trainingsresultate"),
                 ));
           },
         ),
         ListTile(
-          leading: const Icon(Icons.restore),
-          title: const Text('Daten initialisieren'),
+          leading: const Icon(Icons.refresh),
+          title: const Text('Initialisieren der App/Daten'),
           onTap: () {
-            ConfirmInitializationDialog(context, customerID);
+            ConfirmInitializationDialog(context);
           },
         ),
         ListTile(
           leading: const Icon(Icons.remove),
-          title: const Text('Löschen aller Daten'),
+          title: const Text('Löschen aller bisherigen\nTrainingsresultate'),
           onTap: () {
             ConfirmDeletionDialog(context, customerID);
           },
@@ -123,8 +122,8 @@ void ConfirmDeletionDialog(
   Widget okButton = TextButton(
     child: const Text("Ja"),
     onPressed: () {
-      const SnackBar snackBar =
-          SnackBar(content: Text('Alle Daten sind gelöscht!'));
+      const SnackBar snackBar = SnackBar(
+          content: Text('Alle bisherigen Trainingsresultate sind gelöscht!'));
 
       removeCustomerResults(customerID);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -141,9 +140,9 @@ void ConfirmDeletionDialog(
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: const Text('Löschen aller Daten'),
+    title: const Text('Löschen aller bisherigen Trainingsresultate'),
     content:
-        const Text("Möchten Sie alle bisherigen Trainingsergebnisse löschen?"),
+        const Text("Möchten Sie alle bisherigen\nTrainingsresultate löschen?"),
     actions: [
       okButton,
       cancelButton,
@@ -156,5 +155,36 @@ void ConfirmDeletionDialog(
     builder: (BuildContext context) {
       return alert;
     },
+  );
+}
+
+void ConfirmInitializationDialog(BuildContext context) {
+  Widget okButton = TextButton(
+    child: const Text("Ja"),
+    onPressed: () {
+      const SnackBar snackBar = SnackBar(
+          content: Text('Die App und deren Daten sind initialisiert!'));
+
+      initializeApp();
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.of(context).pop();
+    },
+  );
+
+  Widget cancelButton = TextButton(
+    child: const Text("Abbruch"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text('Initialisieren der App/Daten'),
+    content: const Text("Möchten Sie die App und deren Daten initialisieren?"),
+    actions: [
+      okButton,
+      cancelButton,
+    ],
   );
 }

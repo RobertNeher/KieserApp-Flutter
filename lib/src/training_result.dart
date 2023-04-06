@@ -41,13 +41,9 @@ Widget TrainingResultForm(
     lastResult = await r.getLatest();
     preferences = await p.loadPrefs();
 
-    int defaultDuration = preferences['defaultDuration'];
     Map<String, dynamic> defaults = await getStationResult(machine['id']);
     if (_tecDuration.text.isEmpty) {
       _tecDuration.text = '120';
-      //       (defaults['duration'] == null || defaults['duration'] == 0)
-      //           ? defaultDuration.toString()
-      //           : defaults['duration'].toString();
     }
 
     if (_tecWeightDone.text.isEmpty) {
@@ -55,6 +51,29 @@ Widget TrainingResultForm(
     }
     if (_tecWeightPlanned.text.isEmpty) {
       _tecWeightPlanned.text = defaults['weightPlanned'].toString();
+    }
+  }
+
+  Future<void> saveTempResults() async {
+    Map<String, dynamic> result = {
+      'machineID': machine['id'],
+      'duration':
+          _tecDuration.text.isNotEmpty ? int.parse(_tecDuration.text) : 0,
+      'weightDone':
+          _tecWeightDone.text.isNotEmpty ? int.parse(_tecWeightDone.text) : 0,
+      'weightPlanned': _tecWeightPlanned.text.isNotEmpty
+          ? int.parse(_tecWeightPlanned.text)
+          : 0
+    };
+
+    Finder finder = Finder(filter: Filter.equals('machineID', machine['id']));
+    List<RecordSnapshot> record =
+        await tempResult.find(database, finder: finder);
+
+    if (record.length == 0) {
+      await tempResult.add(database, result);
+    } else if (record.length >= 2) {
+      await tempResult.record(record[0].key).put(database, result);
     }
   }
 
@@ -88,6 +107,7 @@ Widget TrainingResultForm(
                         ? int.parse(_tecWeightPlanned.text)
                         : 0
                   });
+                saveTempResults();
               },
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

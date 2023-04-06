@@ -9,9 +9,10 @@ class Storage with ChangeNotifier {
   late StoreRef _tempStore;
   List<Map<String, dynamic>> _trainingResults = <Map<String, dynamic>>[];
 
-  Storage(Database database) {
+  Storage() {
     _database = GetIt.I.get();
     _tempStore = intMapStoreFactory.store(TEMP_STORE);
+    _resultStore = intMapStoreFactory.store('results');
   }
 
   List<Map<String, dynamic>> get results {

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/src/app_bar.dart';

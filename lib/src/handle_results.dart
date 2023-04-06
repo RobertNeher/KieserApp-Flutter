@@ -34,6 +34,7 @@ void saveResults(
       results.add(temp);
     }
   }
+  print('Saving results: $results');
   await resultsStore.add(database, {
     'customerID': customerID,
     'trainingDate': df.format(DateTime.now()),

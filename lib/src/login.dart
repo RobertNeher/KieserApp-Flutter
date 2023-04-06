@@ -24,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
     Preferences p = Preferences();
     preferences = await p.loadPrefs();
     _customerID = preferences['customerID'];
-    tec.text = _customerID.toString();
     return preferences;
   }
 
