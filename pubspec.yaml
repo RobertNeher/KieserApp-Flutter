@@ -30,15 +30,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
+  - assets/fonts/
   - assets/images/
-
   fonts:
     - family: KieserApp
       fonts:
         - asset: assets/fonts/KieserApp.ttf
-
 flutter_icons:
   image_path_android: "assets/launcher_icon/kieser_icon.png"
   android: true

@@ -4,7 +4,6 @@ import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/drawer.dart';
 import 'package:kieser/src/trainings_plan.dart';
 import 'package:model/preferences.dart';
-import 'package:sembast/sembast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -25,8 +24,13 @@ class _LoginPageState extends State<LoginPage> {
     Preferences p = Preferences();
     preferences = await p.loadPrefs();
     _customerID = preferences['customerID'];
-    tec = TextEditingController(text: _customerID.toString());
     return preferences;
+  }
+
+  @override
+  void initState() {
+    tec = TextEditingController(text: _customerID.toString());
+    super.initState();
   }
 
   @override

@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/src/app_bar.dart';
 import 'package:kieser/src/handle_results.dart';
 import 'package:kieser/src/tab_content.dart';
 import 'package:model/plan.dart';
-import 'package:sembast/sembast.dart';
 
 class TrainingsPlan extends StatefulWidget {
   const TrainingsPlan({
@@ -74,11 +71,9 @@ class TrainingsPlanState extends State<TrainingsPlan>
     }
   }
 
-  /**
-   * Buggy behavior from Flutter SDK (beta channel 3.9.0-0.2.pre) : Setstate jumps always
-   * back to first tab. Workaround is in place
-   * Setstate is required to show Floating Action Button, only when last training station has been reached.
-   */
+  /// Buggy behavior from Flutter SDK (beta channel 3.9.0-0.2.pre) : Setstate jumps always
+  /// back to first tab. Workaround is in place
+  /// Setstate is required to show Floating Action Button, only when last training station has been reached.
   void _handleTabSelection() {
     if (_tabController.indexIsChanging) {
       _showFAB = (_tabController.index == _stations.length - 1);
