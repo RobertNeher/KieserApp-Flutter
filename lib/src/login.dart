@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             return Scaffold(
-                appBar: KieserAppBar(customerID: 0, title: 'Login'),
+                appBar: KieserAppBar(customerID: _customerID, title: 'Login'),
                 drawer: KieserDrawer(context),
                 body: Container(
                     width: 500,

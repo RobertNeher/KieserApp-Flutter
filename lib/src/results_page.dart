@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kieser/model/lib/result.dart';
 import 'package:kieser/src/app_bar.dart';
-import 'package:kieser/src/handle_results.dart';
-import 'package:sembast/sembast.dart';
 
 class ResultsPage extends StatefulWidget {
   const ResultsPage({

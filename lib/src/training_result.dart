@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
+// import 'package:get_it/get_it.dart';
 import 'package:kieser/model/lib/preferences.dart';
 import 'package:kieser/model/lib/result.dart';
+import 'package:kieser/provider/storage.dart';
 import 'package:kieser/settings/lib/settings.dart';
+import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
 
 Widget TrainingResultForm(
     Map<String, dynamic> machine, int customerID, void Function() moveForward) {
-  Database database = GetIt.I.get();
   Map<String, dynamic> preferences = {};
   Map<String, dynamic> lastResult = {};
   GlobalKey formKey = GlobalKey<FormState>();
@@ -42,9 +43,7 @@ Widget TrainingResultForm(
 
     Map<String, dynamic> defaults = await getStationResult(machine['id']);
     if (_tecDuration.text.isEmpty) {
-      _tecDuration.text = defaults['duration'].toString();
-      //           ? defaultDuration.toString()
-      //           : defaults['duration'].toString();
+      _tecDuration.text = '120';
     }
 
     if (_tecWeightDone.text.isEmpty) {
@@ -92,9 +91,22 @@ Widget TrainingResultForm(
                   backgroundColor: Colors.blue, strokeWidth: 5));
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          return Form(
+          return Consumer<Storage>(builder: (context, storage, child) {
+            return Form(
               key: formKey,
               onChanged: () {
+                  storage.addResult({
+                    'machineID': machine['id'],
+                    'duration': _tecDuration.text.isNotEmpty
+                        ? int.parse(_tecDuration.text)
+                        : 0,
+                    'weightDone': _tecWeightDone.text.isNotEmpty
+                        ? int.parse(_tecWeightDone.text)
+                        : 0,
+                    'weightPlanned': _tecWeightPlanned.text.isNotEmpty
+                        ? int.parse(_tecWeightPlanned.text)
+                        : 0
+                  });
                 saveTempResults();
               },
               child: Column(
@@ -228,7 +240,8 @@ Widget TrainingResultForm(
                             color: Colors.white),
                       ),
                     ])
-                  ]));
+                    ]));
+          });
         } else {
           return const Center(
               child: Text('Something went wrong!',

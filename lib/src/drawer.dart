@@ -4,7 +4,7 @@ import 'package:kieser/src/initialize.dart';
 import 'package:kieser/src/settings_page.dart';
 import 'package:kieser/src/results_page.dart';
 import 'package:kieser/src/handle_results.dart';
-import 'package:sembast/sembast.dart';
+import 'package:kieser/src/temp_page.dart';
 
 Widget KieserDrawer(BuildContext context) {
   Map<String, dynamic> preferences = {};
@@ -62,10 +62,63 @@ Widget KieserDrawer(BuildContext context) {
             ConfirmDeletionDialog(context, customerID);
           },
         ),
+        ListTile(
+          leading: const Icon(Icons.heat_pump),
+          title: const Text('Unnützer Eintrag'),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      TempPage(title: "Unnützer Scheibenkleister"),
+                ));
+          },
+        ),
       ]));
 }
 
-void ConfirmDeletionDialog(BuildContext context, int customerID) {
+void ConfirmInitializationDialog(BuildContext context, int customerID) {
+  Widget okButton = TextButton(
+    child: const Text("Ja"),
+    onPressed: () {
+      const SnackBar snackBar =
+          SnackBar(content: Text('Daten sind initialisiert!'));
+
+      initializeApp();
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.of(context).pop();
+    },
+  );
+
+  Widget cancelButton = TextButton(
+    child: const Text("Abbruch"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text('Initialisierung der Daten'),
+    content: const Text("Möchten Sie die Daten initialisieren?"),
+    actions: [
+      okButton,
+      cancelButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+void ConfirmDeletionDialog(
+    BuildContext context, int customerID) {
   Widget okButton = TextButton(
     child: const Text("Ja"),
     onPressed: () {
