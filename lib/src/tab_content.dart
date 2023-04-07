@@ -1,7 +1,14 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/machine.dart';
+import 'package:kieser/provider/storage.dart';
 import 'package:kieser/src/get_parameters.dart';
 import 'package:kieser/src/training_result.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sembast/sembast.dart';
 
 class TabContent extends StatefulWidget {
@@ -21,12 +28,19 @@ class TabContent extends StatefulWidget {
 
 class _TabContentState extends State<TabContent>
     with AutomaticKeepAliveClientMixin {
+  String _basePath = '';
   Map<String, dynamic> _machineDetail = {};
 
   Future<Map<String, dynamic>> _getMachineDetail() async {
     Machine machine = Machine();
     _machineDetail = await machine.findByID(widget.machineID);
     return _machineDetail;
+  }
+
+  Future<String> _getPath() async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    _basePath = directory.path;
+    return directory.path;
   }
 
   @override
@@ -41,7 +55,7 @@ class _TabContentState extends State<TabContent>
         width: 500,
         color: Colors.black,
         child: FutureBuilder<void>(
-            future: Future.wait([_getMachineDetail()]),
+            future: Future.wait([_getMachineDetail(), _getPath()]),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -49,7 +63,9 @@ class _TabContentState extends State<TabContent>
                         backgroundColor: Colors.blue, strokeWidth: 5));
               }
               if (snapshot.connectionState == ConnectionState.done) {
-                return Column(
+                return ChangeNotifierProvider<Storage>(
+                    create: (_) => Storage(),
+                    child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
@@ -90,8 +106,14 @@ class _TabContentState extends State<TabContent>
                                                 fontSize: 14,
                                                 color: Colors.white),
                                           ),
-                                          Image.network(
-                                            'assets/images/${widget.machineID.replaceAll(" ", "").toUpperCase()}.png',
+                                              Image.asset(
+                                            join(
+                                                    // 'file://',
+                                                    kIsWeb
+                                                        ? ''
+                                                        : _basePath, // WEB
+                                                'assets/images/',
+                                                '${widget.machineID.replaceAll(" ", "").toUpperCase()}.png'),
                                             height: 100,
                                           ),
                                           const Divider(
@@ -142,9 +164,10 @@ class _TabContentState extends State<TabContent>
                         color: Colors.blue,
                       ),
                       TrainingResultForm(
-                          _machineDetail,
-                          widget.customerID, widget.moveForward)
-                    ]);
+                              machine: _machineDetail,
+                              customerID: widget.customerID,
+                              moveForward: widget.moveForward)
+                        ]));
               } else {
                 return const Center(
                     child: Text('Something went wrong!',
