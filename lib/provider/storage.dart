@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 class Storage with ChangeNotifier {
   late final Database _database;
   late StoreRef _tempStore;
+  late StoreRef _resultStore;
   List<Map<String, dynamic>> _trainingResults = <Map<String, dynamic>>[];
 
   Storage() {

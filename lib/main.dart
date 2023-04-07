@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 // import 'package:window_manager/window_manager.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:sembast_web/sembast_web.dart';
+import 'package:sembast_web/sembast_web.dart'; // WEB
 
 import 'package:settings/settings.dart';
 import 'package:kieser/src/about.dart';
@@ -25,9 +25,10 @@ void main() async {
   // }
   final Database database;
 
+  //WEB
   if (kIsWeb) {
     database = await databaseFactoryWeb.openDatabase(DB_FILE);
-  GetIt.I.registerSingleton<Database>(database);
+    GetIt.I.registerSingleton<Database>(database);
   } else if (Platform.isAndroid) {
     Directory directory = await getApplicationDocumentsDirectory();
     database =
@@ -35,8 +36,7 @@ void main() async {
     GetIt.I.registerSingleton<Database>(database);
   }
 
-  runApp(ChangeNotifierProvider<Storage>(
-      create: (_) => Storage(), child: KieserApp()));
+  runApp(KieserApp());
 }
 
 class KieserApp extends StatelessWidget {

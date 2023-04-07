@@ -62,22 +62,10 @@ Widget KieserDrawer(BuildContext context) {
             ConfirmDeletionDialog(context, customerID);
           },
         ),
-        ListTile(
-          leading: const Icon(Icons.heat_pump),
-          title: const Text('Unnützer Eintrag'),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      TempPage(title: "Unnützer Scheibenkleister"),
-                ));
-          },
-        ),
       ]));
 }
 
-void ConfirmInitializationDialog(BuildContext context, int customerID) {
+void ConfirmInitializationDialog(BuildContext context) {
   Widget okButton = TextButton(
     child: const Text("Ja"),
     onPressed: () {
@@ -100,8 +88,8 @@ void ConfirmInitializationDialog(BuildContext context, int customerID) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: const Text('Initialisierung der Daten'),
-    content: const Text("Möchten Sie die Daten initialisieren?"),
+    title: const Text('Initialisierung der App und derer Daten'),
+    content: const Text("Möchten Sie die App/Daten initialisieren?"),
     actions: [
       okButton,
       cancelButton,
@@ -155,36 +143,5 @@ void ConfirmDeletionDialog(
     builder: (BuildContext context) {
       return alert;
     },
-  );
-}
-
-void ConfirmInitializationDialog(BuildContext context) {
-  Widget okButton = TextButton(
-    child: const Text("Ja"),
-    onPressed: () {
-      const SnackBar snackBar = SnackBar(
-          content: Text('Die App und deren Daten sind initialisiert!'));
-
-      initializeApp();
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      Navigator.of(context).pop();
-    },
-  );
-
-  Widget cancelButton = TextButton(
-    child: const Text("Abbruch"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: const Text('Initialisieren der App/Daten'),
-    content: const Text("Möchten Sie die App und deren Daten initialisieren?"),
-    actions: [
-      okButton,
-      cancelButton,
-    ],
   );
 }
