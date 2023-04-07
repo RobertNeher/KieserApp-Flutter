@@ -36,11 +36,11 @@ void main() async {
     GetIt.I.registerSingleton<Database>(database);
   }
 
-  runApp(KieserApp());
+  runApp(const KieserApp());
 }
 
 class KieserApp extends StatelessWidget {
-  KieserApp({super.key});
+  const KieserApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
