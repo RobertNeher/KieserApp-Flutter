@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 // import 'package:window_manager/window_manager.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-// import 'package:sembast_web/sembast_web.dart';
+import 'package:sembast_web/sembast_web.dart';
 
 import 'package:settings/settings.dart';
 import 'package:kieser/src/about.dart';
@@ -25,15 +25,16 @@ void main() async {
   //   WindowManager.instance.setMaximumSize(const Size(1200, 600));
   // }
   final Database database;
-  final Directory directory = await getApplicationDocumentsDirectory();
-  final String dbPath = join(directory.path, DB_FILE);
-  print(dbPath);
+  final Directory directory;
+  final String dbPath;
 
-  // if (kIsWeb) {
-  // database = await databaseFactoryWeb.openDatabase(DB_FILE);
-  // } else if (Platform.isAndroid) {
-  database = await databaseFactoryIo.openDatabase(dbPath);
-  // }
+  if (kIsWeb) {
+    database = await databaseFactoryWeb.openDatabase(DB_FILE);
+  } else /*if (Platform.isAndroid)*/ {
+    directory = await getApplicationDocumentsDirectory();
+    dbPath = join(directory.path, DB_FILE);
+    database = await databaseFactoryIo.openDatabase(dbPath);
+  }
 
   GetIt.I.registerSingleton<Database>(database);
 
@@ -50,9 +51,7 @@ class KieserApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: APP_TITLE,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: AboutPage(title: APP_TITLE),
     );
   }

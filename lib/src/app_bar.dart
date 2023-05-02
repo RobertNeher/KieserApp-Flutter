@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/customer.dart';
 
-class KieserAppBar extends StatefulWidget with PreferredSizeWidget {
+class KieserAppBar extends StatefulWidget implements PreferredSizeWidget {
   KieserAppBar({Key? key, required this.customerID, required this.title})
       : super(key: key);
   final int customerID;

@@ -102,10 +102,7 @@ class _TabContentState extends State<TabContent>
                                                 color: Colors.white),
                                           ),
                                           Image.network(
-                                            join(
-                                                'file://',
-                                                _basePath,
-                                                'assets/images/',
+                                            join(_basePath, 'assets/images/',
                                                 '${widget.machineID.replaceAll(" ", "").toUpperCase()}.png'),
                                             height: 100,
                                           ),
