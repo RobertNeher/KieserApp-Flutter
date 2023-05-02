@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/plan.dart';
-import 'package:kieser/model/lib/training_data.dart';
 import 'package:model/machine.dart';
-import 'package:sembast/sembast.dart';
 
 // import 'package:model/plan.dart';
 const double ROW_HEIGHT = 35;
