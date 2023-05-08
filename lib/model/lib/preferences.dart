@@ -18,8 +18,6 @@ class Preferences {
   }
 
   Future<int> savePrefs(Map<String, dynamic> data) async {
-    var record = await _prefDataStore.find(_database);
-
     return await _prefDataStore.update(_database, data);
   }
 

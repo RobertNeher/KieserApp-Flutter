@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/customer.dart';
 
-class KieserAppBar extends StatefulWidget with PreferredSizeWidget {
+class KieserAppBar extends StatefulWidget implements PreferredSizeWidget {
   KieserAppBar({Key? key, required this.customerID, required this.title})
       : super(key: key);
   final int customerID;
@@ -52,7 +52,6 @@ class _KieserAppBarState extends State<KieserAppBar> {
                     Text(
                       title,
                       style: const TextStyle(
-                          fontFamily: "Railway",
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
                           color: Colors.white),
@@ -62,7 +61,6 @@ class _KieserAppBarState extends State<KieserAppBar> {
               return const Center(
                   child: Text('Something went wrong!',
                       style: TextStyle(
-                          // fontFamily: 'Railway',
                           fontWeight: FontWeight.bold,
                           fontSize: 24,
                           color: Colors.red)));

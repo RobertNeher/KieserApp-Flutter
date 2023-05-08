@@ -1,7 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
-import 'package:sembast/sembast_io.dart';
-import 'package:settings/settings.dart';
 
 class Result {
   int _customerID = 0;
@@ -42,9 +40,6 @@ class Result {
 }
 
 void main(List<String> args) async {
-  Database database = await databaseFactoryIo.openDatabase(DB_FILE);
-  StoreRef resultStore = intMapStoreFactory.store('results');
-
   List<Map<String, dynamic>> machines = [];
   Result r = Result(19711);
   Map<String, dynamic> latestResult = await r.getLatest();

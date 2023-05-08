@@ -62,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
                             controller: tec,
                             maxLines: 1,
                             style: const TextStyle(
-                                fontFamily: "Railway",
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22,
                                 color: Colors.black),
@@ -94,7 +93,6 @@ class _LoginPageState extends State<LoginPage> {
             return const Center(
                 child: Text('Something went wrong!',
                     style: TextStyle(
-                        // fontFamily: 'Railway',
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                         color: Colors.red)));

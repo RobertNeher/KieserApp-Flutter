@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kieser/model/lib/preferences.dart';
+import 'package:kieser/settings/lib/settings.dart';
 import 'package:kieser/src/app_bar.dart';
-import 'package:kieser/src/handle_results.dart';
+import 'package:get_it/get_it.dart';
+// import 'package:kieser/src/handle_results.dart';
 import 'package:kieser/src/tab_content.dart';
 import 'package:model/plan.dart';
+import 'package:sembast/sembast.dart';
 
 class TrainingsPlan extends StatefulWidget {
   const TrainingsPlan({
@@ -23,7 +26,7 @@ class TrainingsPlanState extends State<TrainingsPlan>
   List<Map<String, dynamic>> _stations = [];
   late TabController _tabController;
   List<Widget> tabContents = <Widget>[];
-  bool _showFAB = false;
+  // bool _showFAB = false;
   String _title = '';
 
   List<Tab> _getTabBar() {
@@ -65,9 +68,16 @@ class TrainingsPlanState extends State<TrainingsPlan>
     return TabBarView(controller: tabController, children: tabContents);
   }
 
-  void _saveResults() {
+  void _saveResults() async {
     if (_tabController.index == _stations.length - 1) {
-      saveResults(widget.customerID, DateTime.now(), context);
+      Database database = GetIt.I.get();
+      StoreRef tempResults = intMapStoreFactory.store(TEMP_STORE);
+
+      List<RecordSnapshot> temps = await tempResults.find(database);
+      for (RecordSnapshot temp in temps) {
+        print(temp.value); // TODO: Remove
+      }
+      // saveResults(widget.customerID, DateTime.now(), context);
     }
   }
 
@@ -76,8 +86,6 @@ class TrainingsPlanState extends State<TrainingsPlan>
   /// Setstate is required to show Floating Action Button, only when last training station has been reached.
   void _handleTabSelection() {
     if (_tabController.indexIsChanging) {
-      _showFAB = (_tabController.index == _stations.length - 1);
-
       // if (_tabController.index == _stations.length - 1) {
       //   setState(() {
       //     _tabController.animateTo(_stations.length - 1);
@@ -138,7 +146,9 @@ class TrainingsPlanState extends State<TrainingsPlan>
                   title: _title,
                 ),
                 floatingActionButton:
-                    _fab, // _showFAB ? _fab : Container(), TODO: Remove workaround
+                    _tabController.index == (_stations.length - 1)
+                        ? _fab
+                        : Container(),
                 body: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -152,13 +162,11 @@ class TrainingsPlanState extends State<TrainingsPlan>
                         indicatorColor: Colors.black,
                         labelColor: Colors.white,
                         unselectedLabelStyle: const TextStyle(
-                            fontFamily: "Railway",
                             fontWeight: FontWeight.normal,
                             fontSize: 24,
                             color: Colors.grey),
                         labelStyle: const TextStyle(
                             backgroundColor: Colors.black,
-                            fontFamily: "Railway",
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
                             color: Colors.white),

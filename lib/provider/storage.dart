@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kieser/settings/lib/settings.dart';
 import 'package:sembast/sembast.dart';
-import 'package:intl/intl.dart';
 
 class Storage with ChangeNotifier {
   late final Database _database;
@@ -34,7 +33,6 @@ class Storage with ChangeNotifier {
         'weightDone': stationResult['weightDone'],
         'weightPlanned': stationResult['weightPlanned']
       };
-      print(result);
       await _tempStore.record(records.key).put(_database, result);
     }
     notifyListeners();

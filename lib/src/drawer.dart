@@ -4,7 +4,6 @@ import 'package:kieser/src/initialize.dart';
 import 'package:kieser/src/settings_page.dart';
 import 'package:kieser/src/results_page.dart';
 import 'package:kieser/src/handle_results.dart';
-import 'package:kieser/src/temp_page.dart';
 
 Widget KieserDrawer(BuildContext context) {
   Map<String, dynamic> preferences = {};

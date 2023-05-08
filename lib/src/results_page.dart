@@ -38,12 +38,10 @@ Widget _getResultTable(Map<String, dynamic> trainingResult) {
     ],
     rows: rowData,
     dataTextStyle: const TextStyle(
-        fontFamily: "Railway",
         fontWeight: FontWeight.normal,
         fontSize: 14,
         color: Colors.black),
     headingTextStyle: const TextStyle(
-        fontFamily: "Railway",
         fontWeight: FontWeight.bold,
         fontSize: 16,
         color: Colors.black),
@@ -92,7 +90,6 @@ class _ResultsPageState extends State<ResultsPage> {
               _trainingTabs.add(Tab(
                   child: Text(tabTitle,
                       style: const TextStyle(
-                        fontFamily: "Railway",
                         color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -129,7 +126,6 @@ class _ResultsPageState extends State<ResultsPage> {
             return const Center(
                 child: Text('Something went wrong!',
                     style: TextStyle(
-                        // fontFamily: 'Railway',
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                         color: Colors.red)));

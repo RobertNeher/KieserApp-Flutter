@@ -66,7 +66,6 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
                         height: ROW_HEIGHT,
                         child: Text(parameters[i],
                             style: const TextStyle(
-                                fontFamily: "Railway",
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
                                 color: Colors.white)))),
@@ -74,7 +73,6 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
                   verticalAlignment: TableCellVerticalAlignment.top,
                   child: Text(parameterValues[i],
                       style: const TextStyle(
-                          fontFamily: "Railway",
                           fontWeight: FontWeight.normal,
                           fontSize: 14,
                           color: Colors.white)),
@@ -88,7 +86,6 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
                       height: ROW_HEIGHT,
                       child: Text("Bewegung",
                           style: TextStyle(
-                              fontFamily: "Railway",
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                               color: Colors.white)))),
@@ -96,7 +93,6 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
                 verticalAlignment: TableCellVerticalAlignment.top,
                 child: Text(parameterValues[i],
                     style: const TextStyle(
-                        fontFamily: "Railway",
                         fontWeight: FontWeight.normal,
                         fontSize: 14,
                         color: Colors.white)),
@@ -109,7 +105,6 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
                       height: ROW_HEIGHT,
                       child: Text("Notizen",
                           style: TextStyle(
-                              fontFamily: "Railway",
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                               color: Colors.white)))),
@@ -117,7 +112,6 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
                 verticalAlignment: TableCellVerticalAlignment.top,
                 child: Text(parameterValues[i + 1],
                     style: const TextStyle(
-                        fontFamily: "Railway",
                         fontWeight: FontWeight.normal,
                         fontSize: 14,
                         color: Colors.white)),
@@ -131,7 +125,6 @@ class _ShowParameterAndValuesState extends State<ShowParameterAndValues> {
                 child: Text(
               'Something went wrong!',
               style: TextStyle(
-                  // fontFamily: "Railway",
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
                   color: Colors.red),

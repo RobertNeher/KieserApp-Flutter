@@ -9,7 +9,6 @@ import 'package:kieser/src/training_result.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:sembast/sembast.dart';
 
 class TabContent extends StatefulWidget {
   const TabContent(
@@ -63,9 +62,7 @@ class _TabContentState extends State<TabContent>
                         backgroundColor: Colors.blue, strokeWidth: 5));
               }
               if (snapshot.connectionState == ConnectionState.done) {
-                return ChangeNotifierProvider<Storage>(
-                    create: (_) => Storage(),
-                    child: Column(
+                return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
@@ -75,7 +72,6 @@ class _TabContentState extends State<TabContent>
                               ? 'Zweck der Maschine'
                               : _machineDetail['title'],
                           style: const TextStyle(
-                              fontFamily: "Railway",
                               fontWeight: FontWeight.bold,
                               fontSize: 24,
                               color: Colors.white)),
@@ -101,7 +97,6 @@ class _TabContentState extends State<TabContent>
                                           const Text(
                                             'Muskelpartien',
                                             style: TextStyle(
-                                                fontFamily: "Railway",
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 14,
                                                 color: Colors.white),
@@ -124,7 +119,6 @@ class _TabContentState extends State<TabContent>
                                           const Text(
                                             'Beschreibung',
                                             style: TextStyle(
-                                                fontFamily: "Railway",
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 14,
                                                 color: Colors.white),
@@ -138,8 +132,8 @@ class _TabContentState extends State<TabContent>
                                                     _machineDetail[
                                                             'description'] ??
                                                         "Das Gerät macht das und das",
-                                                    style: const TextStyle(
-                                                        fontFamily: "Railway",
+                                                    style:
+                                                        const TextStyle(
                                                         fontWeight:
                                                             FontWeight.normal,
                                                         fontSize: 14,
@@ -163,16 +157,18 @@ class _TabContentState extends State<TabContent>
                         thickness: 1,
                         color: Colors.blue,
                       ),
-                      TrainingResultForm(
+                      ChangeNotifierProvider<Storage>(
+                          create: (_) => Storage(),
+                          child: TrainingResultForm(
                               machine: _machineDetail,
                               customerID: widget.customerID,
                               moveForward: widget.moveForward)
-                        ]));
+                        )
+                    ]);
               } else {
                 return const Center(
                     child: Text('Something went wrong!',
                         style: TextStyle(
-                            // fontFamily: 'Railway',
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
                             color: Colors.red)));
@@ -181,6 +177,5 @@ class _TabContentState extends State<TabContent>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

@@ -78,7 +78,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 controller: _tec_customerID,
                                 maxLines: 1,
                                 style: const TextStyle(
-                                    fontFamily: "Railway",
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     color: Colors.black),
@@ -103,7 +102,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 controller: _tec_defaultDuration,
                                 maxLines: 1,
                                 style: const TextStyle(
-                                    fontFamily: "Railway",
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     color: Colors.black),
@@ -147,7 +145,6 @@ class _SettingsPageState extends State<SettingsPage> {
             return const Center(
                 child: Text('Something went wrong!',
                     style: TextStyle(
-                        // fontFamily: 'Railway',
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                         color: Colors.red)));

@@ -74,7 +74,6 @@ class _AboutPageState extends State<AboutPage> {
             return const Center(
                 child: Text('Something went wrong!',
                     style: TextStyle(
-                        // fontFamily: 'Railway',
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                         color: Colors.red)));

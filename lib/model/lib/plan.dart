@@ -1,8 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 import 'package:model/machine.dart';
-import 'package:sembast/sembast_io.dart';
-import 'package:settings/settings.dart';
 
 class Plan {
   int _customerID = 0;
@@ -56,7 +54,6 @@ class Plan {
   }
 
   Future<Map<String, dynamic>> getLatest() async {
-    Map<String, dynamic> result = {};
     Finder finder = Finder(
         filter: Filter.equals('customerID', _customerID),
         sortOrders: [SortOrder('validFrom', false)]);
@@ -84,8 +81,6 @@ class Plan {
 }
 
 void main(List<String> args) async {
-  Database database = await databaseFactoryIo.openDatabase(DB_FILE);
-
   Plan p = Plan(19711);
   print(await p.getLatest());
 }

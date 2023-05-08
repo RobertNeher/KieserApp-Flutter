@@ -1,11 +1,7 @@
-// import 'package:model/customer.dart';
-import 'package:get_it/get_it.dart';
 import 'package:model/plan.dart';
 import 'package:model/machine.dart';
-import 'package:sembast/sembast.dart';
 
 class TrainingData {
-  late Database _database;
   int customerID = 0;
   late List<Map<String, dynamic>> machines;
   late Plan plan;
@@ -15,7 +11,6 @@ class TrainingData {
   }
 
   TrainingData(int customerID) {
-    _database = GetIt.I.get();
     Machine machine = Machine();
     customerID = customerID;
     _getMachines(machine);
