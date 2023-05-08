@@ -46,7 +46,7 @@ class KieserApp extends StatelessWidget {
       title: APP_TITLE,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: 'Raleway',
+        fontFamily: 'Railway',
       ),
       home: AboutPage(title: APP_TITLE),
     );
